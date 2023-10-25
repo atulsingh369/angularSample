@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "angular-dummy-17f14": {
+      "hosting": {
+        "angularSample": [
+          "angular-dummy-17f14"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "angular-dummy-17f14"
+  }
+}
