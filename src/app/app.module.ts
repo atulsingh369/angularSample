@@ -10,12 +10,7 @@ import { provideDatabase, getDatabase } from '@angular/fire/database';
 import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 
 import { RouterModule } from '@angular/router';
-// import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
-// import { MyserviceService } from './myservice.service';
-// import { NewCmpComponent } from './new-cmp/new-cmp.component';
-// import { ChangeTextDirective } from './change-text.directive';
-// import { SqrtPipe } from './app.sqrt';
 
 @NgModule({
   declarations: [AppComponent],
@@ -33,10 +28,3 @@ import { FormsModule } from '@angular/forms';
   bootstrap: [AppComponent],
 })
 export class AppModule {}
-
-export class formSubmit {
-  constructor() {}
-  handleSubmit(): void {
-    alert('form is submited');
-  }
-}
