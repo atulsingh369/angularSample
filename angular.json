@@ -93,7 +93,6 @@
       }
     }
   },
-  "styles": ["styles.scss", "node_modules/ngx-toastr/toastr.css"],
   "cli": {
     "analytics": "772a065d-d82c-4916-a351-616c84269602"
   }

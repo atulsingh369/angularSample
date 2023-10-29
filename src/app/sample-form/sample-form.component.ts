@@ -9,6 +9,7 @@ import {
   setDoc,
   getDocs,
   updateDoc,
+  getDoc,
 } from '@angular/fire/firestore';
 import { FormControl } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
@@ -41,11 +42,14 @@ export class SampleFormComponent implements OnInit, OnChanges {
   constructor(private firestore: Firestore, private toastr: ToastrService) {}
 
   invoicesData: any[] = [];
+  updateData: any[] = [];
   add: boolean = false;
   update: boolean = false;
   del: boolean = false;
+  gotData: boolean = false;
 
-  public ngOnInit(): void {
+	public ngOnInit(): void {
+		
     this.getInvoices();
   }
 
@@ -78,8 +82,7 @@ export class SampleFormComponent implements OnInit, OnChanges {
     );
   }
 
-  delData(): void {
-    console.log(this.invoiceNo);
+	delData(): void {
     deleteDoc(
       doc(this.firestore, `/invoices/invoiceNo - ${this.invoiceNo.value}`)
     )
@@ -87,6 +90,7 @@ export class SampleFormComponent implements OnInit, OnChanges {
         this.toastr.success('Deleted Succesfully');
       })
       .catch((error) => {
+        alert('No Data Found');
         this.toastr.error(error);
       });
   }
@@ -121,31 +125,31 @@ export class SampleFormComponent implements OnInit, OnChanges {
     this.mlrAckn.setValue('');
   }
 
-  getDoc(): void {
-    updateDoc(doc(this.firestore, `/invoices/invoiceNo - ${this.invoiceNo}`), {
-      name: 'Updated name is rick roll',
-    })
-      .then((data) => {
-        console.log('Doc updated');
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
-
-  handleUpdate(): void {
-    this.resetForm();
-    this.update = false;
-    this.invoicesData = [];
-    this.getInvoices();
+  getSingleDoc(): void {
+    const docSnap = getDoc(
+      doc(this.firestore, 'invoices', `invoiceNo - ${this.invoiceNo.value}`)
+    ).then((doc) => {
+      if (doc.exists()) {
+        this.updateData.push(doc.data());
+        console.log(this.updateData);
+        this.gotData = true;
+      } else {
+        alert('No Data Found');
+        this.resetForm();
+        this.gotData = false;
+        this.update = false;
+      }
+    });
   }
 
   handleSubmit(): void {
     this.saveData();
     this.resetForm();
     this.add = false;
+    this.update = false;
     this.invoicesData = [];
     this.getInvoices();
+    this.gotData = false;
     this.toastr.success('Created Succesfully');
   }
 

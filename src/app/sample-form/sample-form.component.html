@@ -1,7 +1,7 @@
 <div class="m-5 text-xl h-screen">
   <p class="text-4xl font-semibold text-center underline">Dataset</p>
 
-  <div>
+  <div class="m-10">
     <ul class="grid grid-cols-3 gap-10 items-center">
       <li
         *ngFor="let data of invoicesData"
@@ -261,8 +261,16 @@
         [formControl]="invoiceNo"
       />
     </div>
-    <!-- 
-    <div class="grid grid-cols-2 gap-96 items-center">
+
+    <button
+      *ngIf="gotData == false"
+      (click)="getSingleDoc()"
+      class="px-4 py-2 border-2 border-white bg-blue-500 text-white text-2xl rounded-xl"
+    >
+      Search
+    </button>
+
+    <div *ngIf="gotData == true" class="grid grid-cols-2 gap-96 items-center">
       <div class="space-y-4">
         <p class="text-2xl text-center underline underline-offset-2">
           Customer Details
@@ -367,7 +375,7 @@
       </div>
     </div>
 
-    <div class="grid grid-cols-2 gap-96 items-center">
+    <div *ngIf="gotData == true" class="grid grid-cols-2 gap-96 items-center">
       <div class="space-y-4">
         <p class="text-2xl text-center underline underline-offset-2">
           Cash Expense
@@ -442,9 +450,10 @@
           />
         </div>
       </div>
-    </div> -->
+    </div>
 
     <button
+      *ngIf="gotData == true"
       type="submit"
       (click)="handleSubmit()"
       class="px-4 py-2 border-2 border-white bg-blue-500 text-white text-2xl rounded-xl"
