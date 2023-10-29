@@ -9,6 +9,8 @@ import { environment } from '../environments/environment';
 import { provideDatabase, getDatabase } from '@angular/fire/database';
 import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 
+import { ToastrModule } from 'ngx-toastr';
+
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SampleFormComponent } from './sample-form/sample-form.component';
@@ -22,6 +24,7 @@ import { SampleFormComponent } from './sample-form/sample-form.component';
     FormsModule,
     RouterModule,
     ReactiveFormsModule,
+    ToastrModule.forRoot(), // ToastrModule added
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideDatabase(() => getDatabase()),
     provideFirestore(() => getFirestore()),

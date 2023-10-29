@@ -1,13 +1,56 @@
 <div class="m-5 text-xl h-screen">
-  <p class="text-4xl font-semibold text-center underline">Form</p>
+  <p class="text-4xl font-semibold text-center underline">Dataset</p>
 
-  <form class="flex flex-col items-center w-screen space-y-4 my-20">
+  <div>
+    <ul class="grid grid-cols-3 gap-10 items-center">
+      <li
+        *ngFor="let data of invoicesData"
+        class="border-2 border-black p-3 rounded-xl h-56 overflow-scroll"
+      >
+        <div
+          class="grid grid-cols-2 gap-24 items-center"
+          *ngFor="let item of data | keyvalue"
+        >
+          <p>{{ item.key }}:</p>
+          <p>{{ item.value }}</p>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <div class="flex justify-evenly items-center m-5">
+    <button
+      class="px-4 py-2 border-2 border-white bg-green-500 text-white text-2xl rounded-xl"
+      (click)="create()"
+    >
+      Add/Create
+    </button>
+    <button
+      class="px-4 py-2 border-2 border-white bg-yellow-500 text-white text-2xl rounded-xl"
+      (click)="upd()"
+    >
+      Update
+    </button>
+    <button
+      class="px-4 py-2 border-2 border-white bg-red-500 text-white text-2xl rounded-xl"
+      (click)="delt()"
+    >
+      Delete
+    </button>
+  </div>
+
+  <!-- Add/Create -->
+  <form
+    *ngIf="add == true && update == false && del == false"
+    class="flex flex-col items-center w-screen space-y-4 my-20"
+  >
     <div class="grid grid-cols-2 gap-6 items-center">
       <label>Invoice No</label>
       <input
         type="text"
         name="invoiceNo"
         class="border-2 border-blue-500 rounded-xl px-2 py-1"
+        required="true"
         [formControl]="invoiceNo"
       />
     </div>
@@ -203,39 +246,234 @@
     </button>
   </form>
 
-  <!-- <form class="space-y-12">
-    <div class="flex flex-col space-y-4 justify-center items-center">
-      <p class="text-center font-semibold text-3xl">Create</p>
+  <!-- Update  -->
+  <form
+    *ngIf="add == false && update == true && del == false"
+    class="flex flex-col items-center w-screen space-y-4 my-20"
+  >
+    <div class="grid grid-cols-2 gap-6 items-center">
+      <label>Invoice No</label>
       <input
-        placeholder="New Value"
         type="text"
-        class="border-2 border-blue-500 w-96 rounded-xl px-2 py-1"
+        name="invoiceNo"
+        class="border-2 border-blue-500 rounded-xl px-2 py-1"
+        required="true"
         [formControl]="invoiceNo"
       />
-      <button
-        type="submit"
-        (click)="handleSubmit()"
-        class="px-4 py-2 border-2 border-white bg-blue-500 text-white text-2xl rounded-xl"
-      >
-        Submit
-      </button>
+    </div>
+    <!-- 
+    <div class="grid grid-cols-2 gap-96 items-center">
+      <div class="space-y-4">
+        <p class="text-2xl text-center underline underline-offset-2">
+          Customer Details
+        </p>
+
+        <div class="grid grid-cols-2 gap-6 items-center">
+          <label>Vehicle No</label>
+          <input
+            type="text"
+            name="vehicleNo"
+            class="border-2 border-blue-500 rounded-xl px-2 py-1"
+            [formControl]="vehicleNo"
+          />
+        </div>
+
+        <div class="grid grid-cols-2 gap-6 items-center">
+          <label>W/S Code</label>
+          <input
+            type="text"
+            name="wsCode"
+            class="border-2 border-blue-500 rounded-xl px-2 py-1"
+            [formControl]="wsCode"
+          />
+        </div>
+        <div class="grid grid-cols-2 gap-6 items-center">
+          <label>W/S Name</label>
+          <input
+            type="text"
+            name="wsName"
+            class="border-2 border-blue-500 rounded-xl px-2 py-1"
+            [formControl]="wsName"
+          />
+        </div>
+        <div class="grid grid-cols-2 gap-6 items-center">
+          <label>W/S Town</label>
+          <input
+            type="text"
+            name="wsTown"
+            class="border-2 border-blue-500 rounded-xl px-2 py-1"
+            [formControl]="wsTown"
+          />
+        </div>
+        <div class="grid grid-cols-2 gap-6 items-center">
+          <label>Distance</label>
+          <input
+            type="number"
+            name="distance"
+            class="border-2 border-blue-500 rounded-xl px-2 py-1"
+            [formControl]="distance"
+          />
+        </div>
+      </div>
+      <div class="space-y-4">
+        <p class="text-2xl text-center underline underline-offset-2">
+          Shipment Details
+        </p>
+        <div class="grid grid-cols-2 gap-6 items-center">
+          <label>KOT</label>
+          <input
+            type="text"
+            name="KOT"
+            class="border-2 border-blue-500 rounded-xl px-2 py-1"
+            [formControl]="KOT"
+          />
+        </div>
+        <div class="grid grid-cols-2 gap-6 items-center">
+          <label>MLR No</label>
+          <input
+            type="text"
+            name="mlrNo"
+            class="border-2 border-blue-500 rounded-xl px-2 py-1"
+            [formControl]="mlrNo"
+          />
+        </div>
+        <div class="grid grid-cols-2 gap-6 items-center">
+          <label>Labour</label>
+          <input
+            type="text"
+            name="labour"
+            class="border-2 border-blue-500 rounded-xl px-2 py-1"
+            [formControl]="labour"
+          />
+        </div>
+        <div class="grid grid-cols-2 gap-6 items-center">
+          <label>Diesel Voucher Number</label>
+          <input
+            type="text"
+            name="deiselVoucherNo"
+            class="border-2 border-blue-500 rounded-xl px-2 py-1"
+            [formControl]="deiselVoucherNo"
+          />
+        </div>
+        <div class="grid grid-cols-2 gap-6 items-center">
+          <label>Diesel Amount</label>
+          <input
+            type="text"
+            name="deiselAmt"
+            class="border-2 border-blue-500 rounded-xl px-2 py-1"
+            [formControl]="deiselAmt"
+          />
+        </div>
+      </div>
     </div>
 
-    <div class="flex flex-col space-y-4 justify-center items-center">
-      <p class="text-center font-semibold text-3xl">Update</p>
-      <button
-        (click)="handleUpdate()"
-        class="px-4 py-2 border-2 border-white bg-blue-500 text-white text-2xl rounded-xl"
-      >
-        Show Data
-      </button>
-      <tr *ngFor="let item of this.myData">
-        <td>{{ item.id }}</td>
-        <ng-container *ngFor="let doc of item.id">
-          <li>{{ doc.sensors_id }}</li>
-          <td>{{ item.active }}</td>
-        </ng-container>
-      </tr>
+    <div class="grid grid-cols-2 gap-96 items-center">
+      <div class="space-y-4">
+        <p class="text-2xl text-center underline underline-offset-2">
+          Cash Expense
+        </p>
+        <div class="grid grid-cols-2 gap-6 items-center">
+          <label>Khuraki</label>
+          <input
+            type="text"
+            name="khuraki"
+            class="border-2 border-blue-500 rounded-xl px-2 py-1"
+            [formControl]="Khuraki"
+          />
+        </div>
+        <div class="grid grid-cols-2 gap-6 items-center">
+          <label>Freight</label>
+          <input
+            type="text"
+            name="frieght"
+            class="border-2 border-blue-500 rounded-xl px-2 py-1"
+            [formControl]="frieght"
+          />
+        </div>
+        <div class="grid grid-cols-2 gap-6 items-center">
+          <label>Toll</label>
+          <input
+            type="text"
+            name="toll"
+            class="border-2 border-blue-500 rounded-xl px-2 py-1"
+            [formControl]="toll"
+          />
+        </div>
+        <div class="grid grid-cols-2 gap-6 items-center">
+          <label>Repairs</label>
+          <input
+            type="text"
+            name="repairs"
+            class="border-2 border-blue-500 rounded-xl px-2 py-1"
+            [formControl]="repairs"
+          />
+        </div>
+      </div>
+      <div class="space-y-4">
+        <p class="text-2xl text-center underline underline-offset-2">
+          Post Delivery
+        </p>
+        <div class="grid grid-cols-2 gap-6 items-center">
+          <label>Cash expense</label>
+          <input
+            type="text"
+            name="cashExp"
+            class="border-2 border-blue-500 rounded-xl px-2 py-1"
+            [formControl]="cashExp"
+          />
+        </div>
+
+        <div class="grid grid-cols-2 gap-6 items-center">
+          <label>Invoice Ackn</label>
+          <input
+            type="text"
+            name="invoiceAckn"
+            class="border-2 border-blue-500 rounded-xl px-2 py-1"
+            [formControl]="invoiceAckn"
+          />
+        </div>
+        <div class="grid grid-cols-2 gap-6 items-center">
+          <label>MLR Ackn</label>
+          <input
+            type="text"
+            name="mlrAckn"
+            class="border-2 border-blue-500 rounded-xl px-2 py-1"
+            [formControl]="mlrAckn"
+          />
+        </div>
+      </div>
+    </div> -->
+
+    <button
+      type="submit"
+      (click)="handleSubmit()"
+      class="px-4 py-2 border-2 border-white bg-blue-500 text-white text-2xl rounded-xl"
+    >
+      Update
+    </button>
+  </form>
+
+  <!-- Delete -->
+  <form
+    *ngIf="add == false && update == false && del == true"
+    class="flex flex-col items-center w-screen space-y-4 my-20"
+  >
+    <div class="grid grid-cols-2 gap-6 items-center">
+      <label>Invoice No</label>
+      <input
+        type="text"
+        name="invoiceNo"
+        class="border-2 border-blue-500 rounded-xl px-2 py-1"
+        required="true"
+        [formControl]="invoiceNo"
+      />
     </div>
-  </form> -->
+    <button
+      type="submit"
+      (click)="handleDelete()"
+      class="px-4 py-2 border-2 border-white bg-blue-500 text-white text-2xl rounded-xl"
+    >
+      Delete
+    </button>
+  </form>
 </div>
