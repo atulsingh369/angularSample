@@ -1,18 +1,14 @@
 <div class="m-5 text-xl h-screen">
   <p class="text-4xl font-semibold text-center underline">Form</p>
 
-  <!-- <form
-    #formData="ngForm"
-    (ngSubmit)="handleSubmit(formData.value)"
-    class="flex flex-col items-center w-screen space-y-4 my-20"
-  >
+  <form class="flex flex-col items-center w-screen space-y-4 my-20">
     <div class="grid grid-cols-2 gap-6 items-center">
       <label>Invoice No</label>
       <input
         type="text"
         name="invoiceNo"
         class="border-2 border-blue-500 rounded-xl px-2 py-1"
-        ngModel
+        [formControl]="invoiceNo"
       />
     </div>
 
@@ -28,44 +24,35 @@
             type="text"
             name="vehicleNo"
             class="border-2 border-blue-500 rounded-xl px-2 py-1"
-            ngModel
+            [formControl]="vehicleNo"
           />
         </div>
 
         <div class="grid grid-cols-2 gap-6 items-center">
-          <label>Vehicle No</label>
+          <label>W/S Code</label>
           <input
             type="text"
             name="wsCode"
             class="border-2 border-blue-500 rounded-xl px-2 py-1"
-            ngModel
-          />
-        </div>
-        <div class="grid grid-cols-2 gap-6 items-center">
-          <label>W/S Code</label>
-          <input
-            type="text"
-            name="wsName"
-            class="border-2 border-blue-500 rounded-xl px-2 py-1"
-            ngModel
+            [formControl]="wsCode"
           />
         </div>
         <div class="grid grid-cols-2 gap-6 items-center">
           <label>W/S Name</label>
           <input
             type="text"
-            name="wsTown"
+            name="wsName"
             class="border-2 border-blue-500 rounded-xl px-2 py-1"
-            ngModel
+            [formControl]="wsName"
           />
         </div>
         <div class="grid grid-cols-2 gap-6 items-center">
           <label>W/S Town</label>
           <input
             type="text"
-            name="invoiceNo"
+            name="wsTown"
             class="border-2 border-blue-500 rounded-xl px-2 py-1"
-            ngModel
+            [formControl]="wsTown"
           />
         </div>
         <div class="grid grid-cols-2 gap-6 items-center">
@@ -74,7 +61,7 @@
             type="number"
             name="distance"
             class="border-2 border-blue-500 rounded-xl px-2 py-1"
-            ngModel
+            [formControl]="distance"
           />
         </div>
       </div>
@@ -88,7 +75,7 @@
             type="text"
             name="KOT"
             class="border-2 border-blue-500 rounded-xl px-2 py-1"
-            ngModel
+            [formControl]="KOT"
           />
         </div>
         <div class="grid grid-cols-2 gap-6 items-center">
@@ -97,7 +84,7 @@
             type="text"
             name="mlrNo"
             class="border-2 border-blue-500 rounded-xl px-2 py-1"
-            ngModel
+            [formControl]="mlrNo"
           />
         </div>
         <div class="grid grid-cols-2 gap-6 items-center">
@@ -106,7 +93,7 @@
             type="text"
             name="labour"
             class="border-2 border-blue-500 rounded-xl px-2 py-1"
-            ngModel
+            [formControl]="labour"
           />
         </div>
         <div class="grid grid-cols-2 gap-6 items-center">
@@ -115,7 +102,7 @@
             type="text"
             name="deiselVoucherNo"
             class="border-2 border-blue-500 rounded-xl px-2 py-1"
-            ngModel
+            [formControl]="deiselVoucherNo"
           />
         </div>
         <div class="grid grid-cols-2 gap-6 items-center">
@@ -124,7 +111,7 @@
             type="text"
             name="deiselAmt"
             class="border-2 border-blue-500 rounded-xl px-2 py-1"
-            ngModel
+            [formControl]="deiselAmt"
           />
         </div>
       </div>
@@ -141,7 +128,7 @@
             type="text"
             name="khuraki"
             class="border-2 border-blue-500 rounded-xl px-2 py-1"
-            ngModel
+            [formControl]="Khuraki"
           />
         </div>
         <div class="grid grid-cols-2 gap-6 items-center">
@@ -150,7 +137,7 @@
             type="text"
             name="frieght"
             class="border-2 border-blue-500 rounded-xl px-2 py-1"
-            ngModel
+            [formControl]="frieght"
           />
         </div>
         <div class="grid grid-cols-2 gap-6 items-center">
@@ -159,7 +146,7 @@
             type="text"
             name="toll"
             class="border-2 border-blue-500 rounded-xl px-2 py-1"
-            ngModel
+            [formControl]="toll"
           />
         </div>
         <div class="grid grid-cols-2 gap-6 items-center">
@@ -168,7 +155,7 @@
             type="text"
             name="repairs"
             class="border-2 border-blue-500 rounded-xl px-2 py-1"
-            ngModel
+            [formControl]="repairs"
           />
         </div>
       </div>
@@ -182,25 +169,17 @@
             type="text"
             name="cashExp"
             class="border-2 border-blue-500 rounded-xl px-2 py-1"
-            ngModel
+            [formControl]="cashExp"
           />
         </div>
-        <div class="grid grid-cols-2 gap-6 items-center">
-          <label>Fast tag Toll</label>
-          <input
-            type="text"
-            name="invoiceNo"
-            class="border-2 border-blue-500 rounded-xl px-2 py-1"
-            ngModel
-          />
-        </div>
+
         <div class="grid grid-cols-2 gap-6 items-center">
           <label>Invoice Ackn</label>
           <input
             type="text"
             name="invoiceAckn"
             class="border-2 border-blue-500 rounded-xl px-2 py-1"
-            ngModel
+            [formControl]="invoiceAckn"
           />
         </div>
         <div class="grid grid-cols-2 gap-6 items-center">
@@ -209,22 +188,24 @@
             type="text"
             name="mlrAckn"
             class="border-2 border-blue-500 rounded-xl px-2 py-1"
-            ngModel
+            [formControl]="mlrAckn"
           />
         </div>
       </div>
     </div>
 
-    <input
+    <button
       type="submit"
-      value="Submit"
+      (click)="handleSubmit()"
       class="px-4 py-2 border-2 border-white bg-blue-500 text-white text-2xl rounded-xl"
-    />
-  </form> -->
+    >
+      Submit
+    </button>
+  </form>
 
-  <form>
-    <p class="text-center font-semibold text-3xl">Create</p>
+  <!-- <form class="space-y-12">
     <div class="flex flex-col space-y-4 justify-center items-center">
+      <p class="text-center font-semibold text-3xl">Create</p>
       <input
         placeholder="New Value"
         type="text"
@@ -240,8 +221,21 @@
       </button>
     </div>
 
-		<div class="flex flex-col space-y-4 justify-center items-center">
-			
-		</div>
-  </form>
+    <div class="flex flex-col space-y-4 justify-center items-center">
+      <p class="text-center font-semibold text-3xl">Update</p>
+      <button
+        (click)="handleUpdate()"
+        class="px-4 py-2 border-2 border-white bg-blue-500 text-white text-2xl rounded-xl"
+      >
+        Show Data
+      </button>
+      <tr *ngFor="let item of this.myData">
+        <td>{{ item.id }}</td>
+        <ng-container *ngFor="let doc of item.id">
+          <li>{{ doc.sensors_id }}</li>
+          <td>{{ item.active }}</td>
+        </ng-container>
+      </tr>
+    </div>
+  </form> -->
 </div>
