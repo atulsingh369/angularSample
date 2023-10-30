@@ -1,16 +1,20 @@
 import { Component, OnInit, OnChanges } from '@angular/core';
 import {
   Firestore,
-  addDoc,
   collection,
-  collectionData,
   deleteDoc,
   doc,
   setDoc,
   getDocs,
-  updateDoc,
   getDoc,
 } from '@angular/fire/firestore';
+import {
+  Auth,
+  signOut,
+  signInWithPopup,
+  GoogleAuthProvider,
+  user,
+} from '@angular/fire/auth';
 import { FormControl } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 
@@ -20,6 +24,10 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./sample-form.component.css'],
 })
 export class SampleFormComponent implements OnInit, OnChanges {
+  // From Variables
+  email = new FormControl('');
+  password = new FormControl('');
+  cnfPassword = new FormControl('');
   invoiceNo = new FormControl('');
   vehicleNo = new FormControl('');
   wsCode = new FormControl('');
@@ -47,9 +55,10 @@ export class SampleFormComponent implements OnInit, OnChanges {
   update: boolean = false;
   del: boolean = false;
   gotData: boolean = false;
+  log: boolean = false;
+  regis: boolean = false;
 
-	public ngOnInit(): void {
-		
+  public ngOnInit(): void {
     this.getInvoices();
   }
 
@@ -82,7 +91,7 @@ export class SampleFormComponent implements OnInit, OnChanges {
     );
   }
 
-	delData(): void {
+  delData(): void {
     deleteDoc(
       doc(this.firestore, `/invoices/invoiceNo - ${this.invoiceNo.value}`)
     )
@@ -177,5 +186,20 @@ export class SampleFormComponent implements OnInit, OnChanges {
     this.del = true;
     this.update = false;
     this.update = false;
+  }
+
+  login(): void {
+    this.log = true;
+    this.del = false;
+    this.update = false;
+    this.update = false;
+  }
+
+  handleLogin(): void {
+    console.log('login');
+  }
+
+  handleRegister(): void {
+    console.log('register');
   }
 }

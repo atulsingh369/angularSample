@@ -1,6 +1,117 @@
 <div class="m-5 text-xl h-screen">
   <p class="text-4xl font-semibold text-center underline">Dataset</p>
 
+  <button
+    *ngIf="log == false"
+    class="px-4 py-2 border-2 border-green-500 float-right bg-blue-500 text-white text-2xl rounded-xl"
+    (click)="login()"
+  >
+    Login
+  </button>
+
+  <!-- Login/Register -->
+  <div>
+    <form
+      *ngIf="log == true && regis == false"
+      class="flex flex-col items-center w-screen space-y-4 my-20"
+    >
+      <div class="grid grid-cols-2 gap-6 items-center">
+        <label>Email</label>
+        <input
+          type="email"
+          name="email"
+          autocomplete="true"
+          autofocus
+          class="border-2 border-blue-500 rounded-xl px-2 py-1"
+          required="true"
+          [formControl]="email"
+        />
+      </div>
+      <div class="grid grid-cols-2 gap-6 items-center">
+        <label>Password</label>
+        <input
+          type="password"
+          name="password"
+          autocomplete="true"
+          class="border-2 border-blue-500 rounded-xl px-2 py-1"
+          required="true"
+          [formControl]="password"
+        />
+      </div>
+      <button
+        type="submit"
+        (click)="handleLogin()"
+        class="px-4 py-2 bg-blue-500 text-white text-2xl rounded-xl"
+      >
+        Sign In
+      </button>
+
+      <p>
+        Don't have an account?
+        <span class="text-blue-500 cursor-pointer" (click)="regis = true"
+          >Register here</span
+        >
+      </p>
+    </form>
+
+    <form
+      *ngIf="log == true && regis == true"
+      class="flex flex-col items-center w-screen space-y-4 my-20"
+    >
+      <div class="grid grid-cols-2 gap-6 items-center">
+        <label>Email</label>
+        <input
+          type="email"
+          name="email"
+          autocomplete="true"
+          autofocus
+          class="border-2 border-blue-500 rounded-xl px-2 py-1"
+          required="true"
+          [formControl]="email"
+        />
+      </div>
+
+      <div class="grid grid-cols-2 gap-6 items-center">
+        <label>Password</label>
+        <input
+          type="password"
+          name="password"
+          autocomplete="true"
+          class="border-2 border-blue-500 rounded-xl px-2 py-1"
+          required="true"
+          [formControl]="password"
+        />
+      </div>
+
+      <div class="grid grid-cols-2 gap-6 items-center">
+        <label>Confirm Password</label>
+        <input
+          type="password"
+          name="cnfPassword"
+          autocomplete="true"
+          class="border-2 border-blue-500 rounded-xl px-2 py-1"
+          required="true"
+          [formControl]="cnfPassword"
+        />
+      </div>
+      <button
+        type="submit"
+        (click)="handleRegister()"
+        class="px-4 py-2 bg-blue-500 text-white text-2xl rounded-xl"
+      >
+        Sign Up
+      </button>
+
+      <p>
+        Already have an account?
+        <span class="text-blue-500 cursor-pointer" (click)="regis = false"
+          >Login here</span
+        >
+      </p>
+    </form>
+  </div>
+
+  <!-- Dataset -->
   <div class="m-10">
     <ul class="grid grid-cols-3 gap-10 items-center">
       <li
@@ -18,21 +129,21 @@
     </ul>
   </div>
 
-  <div class="flex justify-evenly items-center m-5">
+  <div *ngIf="log == false" class="flex justify-evenly items-center m-5">
     <button
-      class="px-4 py-2 border-2 border-white bg-green-500 text-white text-2xl rounded-xl"
+      class="px-4 py-2 bg-green-500 text-white text-2xl rounded-xl"
       (click)="create()"
     >
       Add/Create
     </button>
     <button
-      class="px-4 py-2 border-2 border-white bg-yellow-500 text-white text-2xl rounded-xl"
+      class="px-4 py-2 bg-yellow-500 text-white text-2xl rounded-xl"
       (click)="upd()"
     >
       Update
     </button>
     <button
-      class="px-4 py-2 border-2 border-white bg-red-500 text-white text-2xl rounded-xl"
+      class="px-4 py-2 bg-red-500 text-white text-2xl rounded-xl"
       (click)="delt()"
     >
       Delete
@@ -240,7 +351,7 @@
     <button
       type="submit"
       (click)="handleSubmit()"
-      class="px-4 py-2 border-2 border-white bg-blue-500 text-white text-2xl rounded-xl"
+      class="px-4 py-2 bg-blue-500 text-white text-2xl rounded-xl"
     >
       Submit
     </button>
@@ -265,7 +376,7 @@
     <button
       *ngIf="gotData == false"
       (click)="getSingleDoc()"
-      class="px-4 py-2 border-2 border-white bg-blue-500 text-white text-2xl rounded-xl"
+      class="px-4 py-2 bg-blue-500 text-white text-2xl rounded-xl"
     >
       Search
     </button>
@@ -456,7 +567,7 @@
       *ngIf="gotData == true"
       type="submit"
       (click)="handleSubmit()"
-      class="px-4 py-2 border-2 border-white bg-blue-500 text-white text-2xl rounded-xl"
+      class="px-4 py-2 bg-blue-500 text-white text-2xl rounded-xl"
     >
       Update
     </button>
@@ -480,9 +591,17 @@
     <button
       type="submit"
       (click)="handleDelete()"
-      class="px-4 py-2 border-2 border-white bg-blue-500 text-white text-2xl rounded-xl"
+      class="px-4 py-2 bg-blue-500 text-white text-2xl rounded-xl"
     >
       Delete
     </button>
   </form>
 </div>
+
+<!-- return collectionData(
+      collection(
+        this.firestore,
+        'business/' + this.dataProvider.businessId + '/bills',
+      ),
+      { idField: 'id' },
+    ); -->
