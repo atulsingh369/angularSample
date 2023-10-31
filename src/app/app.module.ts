@@ -11,9 +11,9 @@ import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 import { provideAuth, getAuth } from '@angular/fire/auth';
 
 import { ToastrModule } from 'ngx-toastr';
-
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
 import { SampleFormComponent } from './sample-form/sample-form.component';
 
 @NgModule({

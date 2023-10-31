@@ -10,12 +10,15 @@ import {
 } from '@angular/fire/firestore';
 import {
   Auth,
-  signOut,
-  signInWithPopup,
+  authState,
+  createUserWithEmailAndPassword,
   GoogleAuthProvider,
-  user,
+  signInWithPopup,
+  signOut,
+  UserCredential,
 } from '@angular/fire/auth';
-import { FormControl } from '@angular/forms';
+import { map } from 'rxjs';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -24,10 +27,7 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./sample-form.component.css'],
 })
 export class SampleFormComponent implements OnInit, OnChanges {
-  // From Variables
-  email = new FormControl('');
-  password = new FormControl('');
-  cnfPassword = new FormControl('');
+  // Form Variables
   invoiceNo = new FormControl('');
   vehicleNo = new FormControl('');
   wsCode = new FormControl('');
@@ -47,7 +47,13 @@ export class SampleFormComponent implements OnInit, OnChanges {
   invoiceAckn = new FormControl('');
   mlrAckn = new FormControl('');
 
-  constructor(private firestore: Firestore, private toastr: ToastrService) {}
+  user: any;
+  public loggedIn: boolean = false;
+  constructor(
+    private firestore: Firestore,
+    private toastr: ToastrService,
+    private auth: Auth
+  ) {}
 
   invoicesData: any[] = [];
   updateData: any[] = [];
@@ -57,7 +63,84 @@ export class SampleFormComponent implements OnInit, OnChanges {
   gotData: boolean = false;
   log: boolean = false;
   regis: boolean = false;
+  emailString: any = '';
+  passwordString: any = '';
 
+  //Auth forms and functions
+  userEmails = new FormGroup({
+    email: new FormControl('', [
+      Validators.required,
+      Validators.email,
+      Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$'),
+    ]),
+    password: new FormControl('', [
+      Validators.required,
+      Validators.minLength(8),
+    ]),
+    cnfPassword: new FormControl('', [
+      Validators.required,
+      Validators.minLength(8),
+    ]),
+  });
+
+  get email() {
+    return this.userEmails.get('email');
+  }
+
+  get password() {
+    return this.userEmails.get('password');
+  }
+
+  get cnfPassword() {
+    return this.userEmails.get('password');
+  }
+
+  handleLogin(): void {
+    console.log('login');
+  }
+
+  handleRegister(): void {
+    //Register User
+    if (
+      this.userEmails.controls['email'].value &&
+      this.userEmails.controls['password'].value
+    ) {
+      createUserWithEmailAndPassword(
+        this.auth,
+        this.userEmails.controls['email'].value,
+        this.userEmails.controls['password'].value
+      )
+        .then((userCredential) => {
+          // Signed up
+          const user = userCredential.user;
+          console.log(user);
+          this.regis = false;
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          alert(errorCode);
+        });
+    } else alert('Enter Details');
+  }
+
+  googleLogin(): void {
+    signInWithPopup(this.auth, new GoogleAuthProvider()).then(
+      async (credentials: UserCredential) => {
+        this.user = credentials.user;
+        alert(`Hello, ${this.user.displayName}`);
+      }
+    );
+  }
+
+  login(): void {
+    this.log = true;
+    this.del = false;
+    this.update = false;
+    this.update = false;
+  }
+
+  //FireStore
   public ngOnInit(): void {
     this.getInvoices();
   }
@@ -186,20 +269,5 @@ export class SampleFormComponent implements OnInit, OnChanges {
     this.del = true;
     this.update = false;
     this.update = false;
-  }
-
-  login(): void {
-    this.log = true;
-    this.del = false;
-    this.update = false;
-    this.update = false;
-  }
-
-  handleLogin(): void {
-    console.log('login');
-  }
-
-  handleRegister(): void {
-    console.log('register');
   }
 }
