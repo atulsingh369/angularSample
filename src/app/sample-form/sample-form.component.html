@@ -1,59 +1,37 @@
 <div class="m-5 text-xl h-screen">
   <p class="text-4xl font-semibold text-center underline">Dataset</p>
 
-  <button
-    *ngIf="log == false"
-    class="px-4 py-2 border-2 border-green-500 float-right bg-blue-500 text-white text-2xl rounded-xl"
-    (click)="login()"
+  <!-- Login/Logout Button -->
+  <div
+    *ngIf="isResPass == false"
+    class="flex flex-row-reverse justify-between items-center"
   >
-    Login
-  </button>
-
-  <!-- Login/Register -->
-  <div *ngIf="log == true">
-    <!-- <form
-      *ngIf="regis == false"
-      class="flex flex-col items-center w-screen space-y-4 my-20"
+    <button
+      *ngIf="log == false && userData != null"
+      [matMenuTriggerFor]="menu"
+      class="px-4 py-2 border-2 border-green-500 float-right bg-blue-500 text-white text-2xl rounded-xl"
     >
-      <div class="grid grid-cols-2 gap-6 items-center">
-        <label>Email</label>
-        <input
-          type="email"
-          name="email"
-          autocomplete="true"
-          autofocus
-          class="border-2 border-blue-500 rounded-xl px-2 py-1"
-          required="true"
-          [formControl]="email"
-        />
-      </div>
-      <div class="grid grid-cols-2 gap-6 items-center">
-        <label>Password</label>
-        <input
-          type="password"
-          name="password"
-          autocomplete="true"
-          class="border-2 border-blue-500 rounded-xl px-2 py-1"
-          required="true"
-          [formControl]="password"
-        />
-      </div>
-      <button
-        type="submit"
-        (click)="handleLogin()"
-        class="px-4 py-2 bg-blue-500 text-white text-2xl rounded-xl"
-      >
-        Sign In
-      </button>
+      Hey {{ userData.displayName }}
+      <mat-menu #menu="matMenu">
+        <button (click)="isResPass = true" mat-menu-item>Reset Password</button>
+        <button (click)="logout()" mat-menu-item>Logout</button>
+      </mat-menu>
+    </button>
+    <p *ngIf="userData != null" class="font-semibold text-2xl">
+      Welcome to Datasets !!
+    </p>
+    <button
+      *ngIf="log == false && userData == null"
+      class="px-4 py-2 border-2 border-green-500 float-right bg-blue-500 text-white text-2xl rounded-xl"
+      (click)="login()"
+    >
+      Login
+    </button>
+  </div>
 
-      <p>
-        Don't have an account?
-        <span class="text-blue-500 cursor-pointer" (click)="regis = true"
-          >Register here</span
-        >
-      </p>
-    </form> -->
-
+  <!-- Login/Register Form -->
+  <div *ngIf="log == true">
+    <!-- login -->
     <form
       [formGroup]="userEmails"
       *ngIf="regis == false"
@@ -91,13 +69,13 @@
           "
           type="password"
           required
-					autocomplete
+          autocomplete
           class="form-control border-2 border-blue-500 rounded-xl px-2 py-1"
           formControlName="password"
         />
 
         <div
-				class="col-span-2"
+          class="col-span-2"
           *ngIf="(password?.invalid && password?.touched) || password?.dirty"
         >
           <small *ngIf="password?.errors?.['required']" class="text-red-500"
@@ -110,22 +88,94 @@
         </div>
       </div>
 
-			<div class="form-group grid grid-cols-2 gap-6 items-center">
+      <button
+        type="submit"
+        (click)="handleLogin()"
+        class="px-4 py-2 bg-blue-500 text-white text-2xl rounded-xl"
+      >
+        Sign In
+      </button>
+
+      <p>
+        Don't have an account?
+        <span class="text-blue-500 cursor-pointer" (click)="regis = true"
+          >Register here</span
+        >
+      </p>
+    </form>
+
+    <!-- register -->
+    <form
+      [formGroup]="userEmails"
+      *ngIf="regis == true"
+      class="flex flex-col items-center w-screen space-y-4 my-20"
+    >
+      <div class="form-group grid grid-cols-2 gap-6 items-center">
+        <label>Name</label>
+        <input
+          [class.is-invalid]="
+            userEmails.get('name')?.invalid && userEmails.get('name')?.touched
+          "
+          type="text"
+          required
+          autocomplete
+          class="form-control border-2 border-blue-500 rounded-xl px-2 py-1"
+          formControlName="name"
+        />
+
+        <div
+          class="col-span-2"
+          *ngIf="(name?.invalid && name?.touched) || name?.dirty"
+        >
+          <small *ngIf="name?.errors?.['required']" class="text-red-500"
+            >A Name is required</small
+          >
+          <!--question mark(?) is a safe navigation operator-->
+          <small *ngIf="name?.errors?.['minLength']" class="text-red-500"
+            >Name should be more than 12 characters</small
+          >
+        </div>
+      </div>
+
+      <div class="form-group grid grid-cols-2 gap-6 items-center">
+        <label>Email</label>
+        <input
+          [class.is-invalid]="
+            userEmails.get('email')?.invalid && userEmails.get('email')?.touched
+          "
+          type="email"
+          required
+          class="form-control border-2 border-blue-500 rounded-xl px-2 py-1"
+          formControlName="email"
+        />
+
+        <div *ngIf="(email?.invalid && email?.touched) || email?.dirty">
+          <small *ngIf="email?.errors?.['required']" class="text-red-500"
+            >Email is required</small
+          >
+          <!--question mark(?) is a safe navigation operator-->
+          <small *ngIf="email?.errors?.['pattern']" class="text-red-500"
+            >Please provide a valid email address</small
+          >
+        </div>
+      </div>
+
+      <div class="form-group grid grid-cols-2 gap-6 items-center">
         <label>Password</label>
         <input
           [class.is-invalid]="
-            userEmails.get('cnfPassword')?.invalid &&
-            userEmails.get('cnfPassword')?.touched
+            userEmails.get('password')?.invalid &&
+            userEmails.get('password')?.touched
           "
           type="password"
           required
-					autocomplete
+          autocomplete
           class="form-control border-2 border-blue-500 rounded-xl px-2 py-1"
           formControlName="password"
         />
 
         <div
-				class="col-span-2"
+          class="col-span-2"
           *ngIf="(password?.invalid && password?.touched) || password?.dirty"
         >
           <small *ngIf="password?.errors?.['required']" class="text-red-500"
@@ -154,6 +204,7 @@
       </p>
     </form>
 
+    <!-- google login -->
     <div class="flex justify-center items-center">
       <div (click)="googleLogin()" class="g-sign-in-button">
         <div class="content-wrapper">
@@ -170,8 +221,34 @@
     </div>
   </div>
 
+  <!-- Reset Password -->
+  <form
+    *ngIf="isResPass == true"
+    class="flex flex-col items-center w-screen space-y-4 my-20"
+  >
+    <div class="grid grid-cols-2 gap-6 items-center">
+      <label>New Password</label>
+      <input
+        type="password"
+        name="resPass"
+        autocomplete="true"
+        class="border-2 border-blue-500 rounded-xl px-2 py-1"
+        required="true"
+        [formControl]="resPass"
+      />
+    </div>
+
+    <button
+      type="submit"
+      (click)="resetPass()"
+      class="px-4 py-2 bg-blue-500 text-white text-2xl rounded-xl"
+    >
+      Reset Password
+    </button>
+  </form>
+
   <!-- Dataset -->
-  <div class="m-10">
+  <div *ngIf="isResPass == false" class="m-10">
     <ul class="grid grid-cols-3 gap-10 items-center">
       <li
         *ngFor="let data of invoicesData"
@@ -188,7 +265,11 @@
     </ul>
   </div>
 
-  <div *ngIf="log == false" class="flex justify-evenly items-center m-5">
+  <!-- CRUD buttons -->
+  <div
+    *ngIf="log == false && isResPass == false"
+    class="flex justify-evenly items-center m-5"
+  >
     <button
       class="px-4 py-2 bg-green-500 text-white text-2xl rounded-xl"
       (click)="create()"

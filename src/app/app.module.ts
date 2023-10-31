@@ -8,13 +8,15 @@ import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { environment } from '../environments/environment';
 import { provideDatabase, getDatabase } from '@angular/fire/database';
 import { provideFirestore, getFirestore } from '@angular/fire/firestore';
-import { provideAuth, getAuth } from '@angular/fire/auth';
+import { provideAuth, getAuth, Auth } from '@angular/fire/auth';
 
 import { ToastrModule } from 'ngx-toastr';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatMenuModule } from '@angular/material/menu';
 
 import { SampleFormComponent } from './sample-form/sample-form.component';
+import { AuthenticationService } from './core/services/authentication/authentication.service';
 
 @NgModule({
   declarations: [AppComponent, SampleFormComponent],
@@ -25,13 +27,14 @@ import { SampleFormComponent } from './sample-form/sample-form.component';
     FormsModule,
     RouterModule,
     ReactiveFormsModule,
+    MatMenuModule,
     ToastrModule.forRoot(), // ToastrModule added
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideDatabase(() => getDatabase()),
     provideFirestore(() => getFirestore()),
     provideAuth(() => getAuth()),
   ],
-  providers: [],
+  providers: [AuthenticationService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
