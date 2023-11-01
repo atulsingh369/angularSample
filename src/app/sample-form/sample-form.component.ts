@@ -75,7 +75,6 @@ export class SampleFormComponent implements OnInit, OnChanges {
   gotData: boolean = false;
   log: boolean = false;
   regis: boolean = false;
-  userData: any;
   isResPass: boolean = false;
 
   public ngOnInit(): void {
@@ -128,9 +127,12 @@ export class SampleFormComponent implements OnInit, OnChanges {
         .then((userCredential) => {
           // Signed in
           const user = userCredential.user;
-          alert(`Hello, ${user.displayName}`);
-          localStorage.setItem('user', JSON.stringify(user));
           this.getAuthData();
+
+          this.userEmails.reset();
+          this.userEmails.controls['name'].setErrors(null);
+          this.userEmails.controls['email'].setErrors(null);
+          this.userEmails.controls['password'].setErrors(null);
           this.log = false;
         })
         .catch((error) => {
@@ -158,6 +160,19 @@ export class SampleFormComponent implements OnInit, OnChanges {
           updateProfile(user, {
             displayName: this.userEmails.controls['name'].value,
           });
+
+          setDoc(
+            doc(
+              this.firestore,
+              'users',
+              `${this.userEmails.controls['email'].value}`
+            ),
+            {
+              displayName: this.userEmails.controls['name'].value,
+              email: this.userEmails.controls['email'].value,
+            }
+          );
+
           this.userEmails.reset();
           this.userEmails.controls['name'].setErrors(null);
           this.userEmails.controls['email'].setErrors(null);
@@ -167,7 +182,6 @@ export class SampleFormComponent implements OnInit, OnChanges {
         })
         .catch((error) => {
           const errorCode = error.code;
-          const errorMessage = error.message;
           alert(errorCode);
         });
     } else alert('Enter Details');
@@ -177,7 +191,7 @@ export class SampleFormComponent implements OnInit, OnChanges {
     signInWithPopup(this.auth, new GoogleAuthProvider()).then(
       async (credentials: UserCredential) => {
         this.user = credentials.user;
-        alert(`Hello, ${this.user.displayName}`);
+        this.regis = false;
       }
     );
   }
@@ -203,8 +217,7 @@ export class SampleFormComponent implements OnInit, OnChanges {
   }
 
   getAuthData(): void {
-    this.userData = localStorage.getItem('user');
-    this.userData = JSON.parse(this.userData);
+    this.user = this.authenticationService.currentUser;
   }
 
   resetPass(): void {
@@ -251,6 +264,8 @@ export class SampleFormComponent implements OnInit, OnChanges {
         cashExp: this.cashExp.value,
         invoiceAckn: this.invoiceAckn.value,
         mlrAckn: this.mlrAckn.value,
+        userDisplayName: this.authenticationService.currentUser?.displayName,
+        userEmail: this.authenticationService.currentUser?.email,
       }
     );
   }
@@ -316,22 +331,26 @@ export class SampleFormComponent implements OnInit, OnChanges {
   }
 
   handleSubmit(): void {
-    this.saveData();
-    this.resetForm();
-    this.add = false;
-    this.update = false;
-    this.invoicesData = [];
-    this.getInvoices();
-    this.gotData = false;
-    this.toastr.success('Created Succesfully');
+    if (this.authenticationService.currentUser) {
+      this.saveData();
+      this.resetForm();
+      this.add = false;
+      this.update = false;
+      this.invoicesData = [];
+      this.getInvoices();
+      this.gotData = false;
+      this.toastr.success('Created Succesfully');
+    } else alert('Login to continue...');
   }
 
   handleDelete(): void {
-    this.delData();
-    this.resetForm();
-    this.del = false;
-    this.invoicesData = [];
-    this.getInvoices();
+    if (this.authenticationService.currentUser) {
+      this.delData();
+      this.resetForm();
+      this.del = false;
+      this.invoicesData = [];
+      this.getInvoices();
+    } else alert('Login to continue...');
   }
 
   create(): void {

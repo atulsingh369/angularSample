@@ -14,6 +14,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatIconModule } from '@angular/material/icon';
 
 import { SampleFormComponent } from './sample-form/sample-form.component';
 import { AuthenticationService } from './core/services/authentication/authentication.service';
@@ -28,6 +29,7 @@ import { AuthenticationService } from './core/services/authentication/authentica
     RouterModule,
     ReactiveFormsModule,
     MatMenuModule,
+    MatIconModule,
     ToastrModule.forRoot(), // ToastrModule added
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideDatabase(() => getDatabase()),
