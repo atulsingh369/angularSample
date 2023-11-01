@@ -191,7 +191,7 @@ export class SampleFormComponent implements OnInit, OnChanges {
     signInWithPopup(this.auth, new GoogleAuthProvider()).then(
       async (credentials: UserCredential) => {
         this.user = credentials.user;
-        this.regis = false;
+				this.log = false;
       }
     );
   }
