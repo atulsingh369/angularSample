@@ -9,9 +9,10 @@
     <button
       *ngIf="log == false && user != null"
       [matMenuTriggerFor]="menu"
-      class="px-4 py-2 border-2 border-green-500 float-right bg-blue-500 text-white text-2xl rounded-xl"
+      class="px-4 py-2 w-48 border-2 border-green-500 items-center flex justify-evenly float-right bg-blue-500 text-white text-2xl rounded-xl"
     >
-      Hey {{ user.displayName }}
+      <mat-icon>account_circle</mat-icon>
+      <span>{{ user.displayName }}</span>
       <mat-menu #menu="matMenu">
         <button (click)="isResPass = true" mat-menu-item>Reset Password</button>
         <button (click)="logout()" mat-menu-item>Logout</button>
