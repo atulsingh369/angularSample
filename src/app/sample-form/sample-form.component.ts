@@ -158,7 +158,10 @@ export class SampleFormComponent implements OnInit, OnChanges {
           updateProfile(user, {
             displayName: this.userEmails.controls['name'].value,
           });
-          this.userEmails.reset(this.userEmails.value);
+          this.userEmails.reset();
+          this.userEmails.controls['name'].setErrors(null);
+          this.userEmails.controls['email'].setErrors(null);
+          this.userEmails.controls['password'].setErrors(null);
           alert('User registered');
           this.regis = false;
         })
@@ -205,7 +208,6 @@ export class SampleFormComponent implements OnInit, OnChanges {
   }
 
   resetPass(): void {
-    console.log(this.authenticationService.currentUser);
     if (this.authenticationService.currentUser) {
       if (this.resPass.value) {
         updatePassword(
