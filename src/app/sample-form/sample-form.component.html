@@ -1,5 +1,5 @@
 <div class="m-5 text-xl h-screen">
-  <p class="text-4xl font-semibold text-center underline">Dataset</p>
+  <p class="text-4xl font-semibold text-center underline">Datasets</p>
 
   <!-- Login/Logout Button -->
   <div
@@ -95,17 +95,24 @@
       <!-- password -->
       <div class="form-group grid grid-cols-2 gap-6 items-center">
         <label>Password</label>
-        <input
-          [class.is-invalid]="
-            userEmails.get('password')?.invalid &&
-            userEmails.get('password')?.touched
-          "
-          type="password"
-          required
-          autocomplete
-          class="form-control border-2 border-blue-500 rounded-xl px-2 py-1"
-          formControlName="password"
-        />
+        <div
+          class="flex itens-center justify-between border-2 border-blue-500 rounded-xl px-2 py-1"
+        >
+          <input
+            [class.is-invalid]="
+              userEmails.get('password')?.invalid &&
+              userEmails.get('password')?.touched
+            "
+            [type]="showPassword ? 'text' : 'password'"
+            required
+            autocomplete
+            class="form-control outline-0"
+            formControlName="password"
+          />
+          <mat-icon matSuffix (click)="showPassword = !showPassword">{{
+            showPassword ? "visibility" : "visibility_off"
+          }}</mat-icon>
+        </div>
 
         <div
           class="col-span-2"
@@ -210,16 +217,30 @@
   <!-- Dataset -->
   <div *ngIf="isResPass == false && log == false" class="m-10">
     <ul class="grid grid-cols-3 gap-10 items-center">
-      <li
-        *ngFor="let data of invoicesData"
-        class="border-2 border-black p-3 rounded-xl h-56 overflow-scroll"
-      >
-        <div
-          class="grid grid-cols-2 gap-24 items-center"
-          *ngFor="let item of data | keyvalue"
-        >
-          <p>{{ item.key }}:</p>
-          <p>{{ item.value }}</p>
+      <li *ngFor="let data of invoicesData" class="">
+        <div class="border-2 border-black p-3 rounded-xl h-56 overflow-scroll">
+          <div
+            class="grid grid-cols-2 gap-24 items-center"
+            *ngFor="let item of data | keyvalue"
+          >
+            <p>{{ item.key }}:</p>
+            <p>{{ item.value }}</p>
+          </div>
+        </div>
+        <div class="flex p-3 justify-evenly items-center">
+          <button
+            (click)="upd(data.id)"
+            class="material-icons text-yellow-700 text-4xl"
+          >
+            edit_note
+          </button>
+
+          <button
+            class="material-icons text-red-500 text-4xl"
+            (click)="handleDelete(data.id)"
+          >
+            delete
+          </button>
         </div>
       </li>
     </ul>
@@ -236,18 +257,6 @@
         (click)="create()"
       >
         Add/Create
-      </button>
-      <button
-        class="px-4 py-2 bg-yellow-500 text-white text-2xl rounded-xl"
-        (click)="upd()"
-      >
-        Update
-      </button>
-      <button
-        class="px-4 py-2 bg-red-500 text-white text-2xl rounded-xl"
-        (click)="delt()"
-      >
-        Delete
       </button>
     </div>
     <p
@@ -285,6 +294,7 @@
           <label>Vehicle No</label>
           <input
             type="text"
+            required="true"
             name="vehicleNo"
             class="border-2 border-blue-500 rounded-xl px-2 py-1"
             [formControl]="vehicleNo"
@@ -459,7 +469,7 @@
 
     <button
       type="submit"
-      (click)="handleSubmit()"
+      (click)="handleSubmit(null)"
       class="px-4 py-2 bg-blue-500 text-white text-2xl rounded-xl"
     >
       Submit
@@ -471,25 +481,6 @@
     *ngIf="add == false && update == true && del == false"
     class="flex flex-col items-center w-screen space-y-4 my-20"
   >
-    <div class="grid grid-cols-2 gap-6 items-center">
-      <label>Invoice No</label>
-      <input
-        type="text"
-        name="invoiceNo"
-        class="border-2 border-blue-500 rounded-xl px-2 py-1"
-        required="true"
-        [formControl]="invoiceNo"
-      />
-    </div>
-
-    <button
-      *ngIf="gotData == false"
-      (click)="getSingleDoc()"
-      class="px-4 py-2 bg-blue-500 text-white text-2xl rounded-xl"
-    >
-      Search
-    </button>
-
     <div *ngIf="gotData == true" class="grid grid-cols-2 gap-96 items-center">
       <div class="space-y-4">
         <p class="text-2xl text-center underline underline-offset-2">
@@ -675,34 +666,10 @@
     <button
       *ngIf="gotData == true"
       type="submit"
-      (click)="handleSubmit()"
+      (click)="handleSubmit(invoiceId)"
       class="px-4 py-2 bg-blue-500 text-white text-2xl rounded-xl"
     >
       Update
-    </button>
-  </form>
-
-  <!-- Delete Invoices -->
-  <form
-    *ngIf="add == false && update == false && del == true"
-    class="flex flex-col items-center w-screen space-y-4 my-20"
-  >
-    <div class="grid grid-cols-2 gap-6 items-center">
-      <label>Invoice No</label>
-      <input
-        type="text"
-        name="invoiceNo"
-        class="border-2 border-blue-500 rounded-xl px-2 py-1"
-        required="true"
-        [formControl]="invoiceNo"
-      />
-    </div>
-    <button
-      type="submit"
-      (click)="handleDelete()"
-      class="px-4 py-2 bg-blue-500 text-white text-2xl rounded-xl"
-    >
-      Delete
     </button>
   </form>
 </div>

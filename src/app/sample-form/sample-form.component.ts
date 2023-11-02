@@ -28,7 +28,6 @@ import {
   Validators,
 } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { ComparePassword } from './customvalidator.validator';
 import { AuthenticationService } from '../core/services/authentication/authentication.service';
 
 @Component({
@@ -69,6 +68,7 @@ export class SampleFormComponent implements OnInit, OnChanges {
 
   invoicesData: any[] = [];
   updateData: any[] = [];
+  invoiceId: any = '';
   add: boolean = false;
   update: boolean = false;
   del: boolean = false;
@@ -76,6 +76,7 @@ export class SampleFormComponent implements OnInit, OnChanges {
   log: boolean = false;
   regis: boolean = false;
   isResPass: boolean = false;
+  public showPassword: boolean = false;
 
   public ngOnInit(): void {
     this.getInvoices();
@@ -127,6 +128,7 @@ export class SampleFormComponent implements OnInit, OnChanges {
         .then((userCredential) => {
           // Signed in
           const user = userCredential.user;
+          localStorage.setItem('userData', JSON.stringify(user));
           this.getAuthData();
 
           this.userEmails.reset();
@@ -139,6 +141,10 @@ export class SampleFormComponent implements OnInit, OnChanges {
           const errorCode = error.code;
           const errorMessage = error.message;
           alert(errorCode);
+          this.userEmails.reset();
+          this.userEmails.controls['name'].setErrors(null);
+          this.userEmails.controls['email'].setErrors(null);
+          this.userEmails.controls['password'].setErrors(null);
         });
     } else alert('Enter Details');
   }
@@ -161,17 +167,10 @@ export class SampleFormComponent implements OnInit, OnChanges {
             displayName: this.userEmails.controls['name'].value,
           });
 
-          setDoc(
-            doc(
-              this.firestore,
-              'users',
-              `${this.userEmails.controls['email'].value}`
-            ),
-            {
-              displayName: this.userEmails.controls['name'].value,
-              email: this.userEmails.controls['email'].value,
-            }
-          );
+          setDoc(doc(this.firestore, 'users', `${user.uid}`), {
+            displayName: this.userEmails.controls['name'].value,
+            email: this.userEmails.controls['email'].value,
+          });
 
           this.userEmails.reset();
           this.userEmails.controls['name'].setErrors(null);
@@ -191,7 +190,11 @@ export class SampleFormComponent implements OnInit, OnChanges {
     signInWithPopup(this.auth, new GoogleAuthProvider()).then(
       async (credentials: UserCredential) => {
         this.user = credentials.user;
-				this.log = false;
+        this.log = false;
+        setDoc(doc(this.firestore, 'users', `${this.user.uid}`), {
+          displayName: this.user.displayName,
+          email: this.user.email,
+        });
       }
     );
   }
@@ -218,6 +221,10 @@ export class SampleFormComponent implements OnInit, OnChanges {
 
   getAuthData(): void {
     this.user = this.authenticationService.currentUser;
+    if (window.localStorage.getItem('userData')) {
+      const authData: any = window.localStorage.getItem('userData');
+      this.user = JSON.parse(authData);
+    }
   }
 
   resetPass(): void {
@@ -243,9 +250,13 @@ export class SampleFormComponent implements OnInit, OnChanges {
   }
 
   //FireStore
-  saveData(): void {
+  saveData(id: any): void {
     setDoc(
-      doc(this.firestore, 'invoices', `invoiceNo - ${this.invoiceNo.value}`),
+      doc(
+        this.firestore,
+        'invoices',
+        id ? `${id}` : `invoiceNo - ${this.invoiceNo.value}`
+      ),
       {
         vehicleNo: this.vehicleNo.value,
         wsCode: this.wsCode.value,
@@ -270,10 +281,8 @@ export class SampleFormComponent implements OnInit, OnChanges {
     );
   }
 
-  delData(): void {
-    deleteDoc(
-      doc(this.firestore, `/invoices/invoiceNo - ${this.invoiceNo.value}`)
-    )
+  delData(id: any): void {
+    deleteDoc(doc(this.firestore, `/invoices/${id}`))
       .then((data) => {
         this.toastr.success('Deleted Succesfully');
       })
@@ -313,26 +322,53 @@ export class SampleFormComponent implements OnInit, OnChanges {
     this.mlrAckn.setValue('');
   }
 
-  getSingleDoc(): void {
-    const docSnap = getDoc(
-      doc(this.firestore, 'invoices', `invoiceNo - ${this.invoiceNo.value}`)
-    ).then((doc) => {
-      if (doc.exists()) {
-        this.updateData.push(doc.data());
-        console.log(this.updateData);
-        this.gotData = true;
-      } else {
-        alert('No Data Found');
-        this.resetForm();
-        this.gotData = false;
-        this.update = false;
+  getSingleDoc(id: any): void {
+    const docSnap = getDoc(doc(this.firestore, 'invoices', `${id}`)).then(
+      (doc) => {
+        if (doc.exists()) {
+          this.updateData.push(doc.data());
+          console.log(this.updateData);
+          this.gotData = true;
+        } else {
+          alert('No Data Found');
+          this.resetForm();
+          this.gotData = false;
+          this.update = false;
+        }
       }
-    });
+    );
   }
 
-  handleSubmit(): void {
+  handleSubmit(id: any): void {
+    const myArray: any[] = [
+      'invoiceNo',
+      'vehicleNo',
+      'wsCode',
+      'wsName',
+      'wsTown',
+      'distance',
+      'KOT',
+      'mlrNo',
+      'labour',
+      'deiselVoucherNo',
+      'deiselAmt',
+      'Khuraki',
+      'frieght',
+      'toll',
+      'repairs',
+      'cashExp',
+      'invoiceAckn',
+      'mlrAckn',
+    ];
+    for (let i = 0; i < myArray.length; i++) {
+      if (myArray[i].value == '') {
+        alert('Enter Details');
+        return;
+      }
+    }
+
     if (this.authenticationService.currentUser) {
-      this.saveData();
+      this.saveData(id);
       this.resetForm();
       this.add = false;
       this.update = false;
@@ -343,9 +379,9 @@ export class SampleFormComponent implements OnInit, OnChanges {
     } else alert('Login to continue...');
   }
 
-  handleDelete(): void {
+  handleDelete(id: any): void {
     if (this.authenticationService.currentUser) {
-      this.delData();
+      this.delData(id);
       this.resetForm();
       this.del = false;
       this.invoicesData = [];
@@ -359,10 +395,12 @@ export class SampleFormComponent implements OnInit, OnChanges {
     this.del = false;
   }
 
-  upd(): void {
+  upd(id: any): void {
     this.update = true;
     this.add = false;
     this.del = false;
+    this.invoiceId = id;
+    this.getSingleDoc(id);
   }
 
   delt(): void {
