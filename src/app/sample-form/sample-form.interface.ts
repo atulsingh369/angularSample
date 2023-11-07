@@ -1,0 +1,31 @@
+export interface InvoiceData {
+  billingDate: string;
+  soldToParty: number;
+  customerName: string;
+  billingDoc: string;
+  invoiceNo: string;
+  gstInvoiceNo: string;
+  KOT: number;
+  totalInvoiceAmt: number;
+  salesShipmentDiff: number;
+  shipmentNo: number;
+  mlrNo: number;
+  frieght: number;
+  shipmentCostDate: string;
+  transporterName: string;
+  serviceAgent: string;
+  ownership: 'ATTACHED' | 'OWNED';
+  vehicleNo: string;
+  wsCode: string;
+  wsName: string;
+  wsTown: string;
+  distance: string;
+  labour: string;
+  deiselVoucherNo: string;
+  deiselAmt: string;
+  Khuraki: string;
+  toll: string;
+  repairs: string;
+  userDisplayName: string;
+  userEmail: string;
+}

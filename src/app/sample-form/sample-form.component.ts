@@ -8,6 +8,7 @@ import {
   getDocs,
   getDoc,
 } from '@angular/fire/firestore';
+import { read, utils, writeFile } from 'xlsx';
 import {
   Auth,
   updatePassword,
@@ -29,6 +30,7 @@ import {
 } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { AuthenticationService } from '../core/services/authentication/authentication.service';
+import { InvoiceData } from './sample-form.interface';
 
 @Component({
   selector: 'app-sample-form',
@@ -67,7 +69,37 @@ export class SampleFormComponent implements OnInit, OnChanges {
   ) {}
 
   invoicesData: any[] = [];
-  updateData: any[] = [];
+  updateData: InvoiceData = {
+    billingDate: '',
+    soldToParty: 0,
+    customerName: '',
+    billingDoc: '',
+    invoiceNo: '',
+    gstInvoiceNo: '',
+    KOT: 0,
+    totalInvoiceAmt: 0,
+    salesShipmentDiff: 0,
+    shipmentNo: 0,
+    mlrNo: 0,
+    frieght: 0,
+    shipmentCostDate: '',
+    transporterName: '',
+    serviceAgent: '',
+    ownership: 'ATTACHED',
+    vehicleNo: '',
+    wsCode: '',
+    wsName: '',
+    wsTown: '',
+    distance: '',
+    labour: '',
+    deiselVoucherNo: '',
+    deiselAmt: '',
+    Khuraki: '',
+    toll: '',
+    repairs: '',
+    userDisplayName: '',
+    userEmail: '',
+  };
   invoiceId: any = '';
   add: boolean = false;
   update: boolean = false;
@@ -210,13 +242,14 @@ export class SampleFormComponent implements OnInit, OnChanges {
     signOut(this.auth)
       .then(() => {
         // Sign-out successful.
-        localStorage.removeItem('user');
+        localStorage.removeItem('userData');
         alert('Logged Out');
         this.getAuthData();
       })
       .catch((error) => {
         console.log(error);
       });
+    this.getInvoices();
   }
 
   getAuthData(): void {
@@ -326,8 +359,8 @@ export class SampleFormComponent implements OnInit, OnChanges {
     const docSnap = getDoc(doc(this.firestore, 'invoices', `${id}`)).then(
       (doc) => {
         if (doc.exists()) {
-          this.updateData.push(doc.data());
-          console.log(this.updateData);
+          this.updateData.invoiceNo = doc.data()?.['invoiceNo'];
+          this.updateData.vehicleNo = doc.data()?.['vehicleNo'];
           this.gotData = true;
         } else {
           alert('No Data Found');
@@ -396,16 +429,71 @@ export class SampleFormComponent implements OnInit, OnChanges {
   }
 
   upd(id: any): void {
-    this.update = true;
-    this.add = false;
-    this.del = false;
-    this.invoiceId = id;
-    this.getSingleDoc(id);
+    if (this.authenticationService.currentUser) {
+      this.update = true;
+      this.add = false;
+      this.del = false;
+      this.invoiceId = id;
+      this.getSingleDoc(id);
+    } else alert('Login to continue...');
   }
 
   delt(): void {
     this.del = true;
     this.update = false;
     this.update = false;
+  }
+
+  uploadDataXl(data: any): void {
+    if (data?.['Custom Invoice No'])
+      setDoc(
+        doc(this.firestore, 'invoices', `${data?.['Custom Invoice No']}`),
+        {
+          customerName: data?.['Customer Name'],
+          vehicleNo: data?.['Lorry No'],
+          wsCode: '',
+          wsName: '',
+          wsTown: '',
+          distance: '',
+          KOT: data?.['KOT'],
+          mlrNo: data?.['LR No'],
+          labour: '',
+          deiselVoucherNo: '',
+          deiselAmt: '',
+          Khuraki: '',
+          frieght: data?.['Shipment Cost'],
+          toll: '',
+          repairs: '',
+          billingDate: data?.['Billing Date'],
+          soldToParty: data?.['Sold-To Party'],
+          billingDoc: data?.['Billing Document'],
+          invoiceNo: data?.['GST Invoice 0'],
+          salesShipmentDiff: data?.['Sales Value Minus Shipment Cost'],
+          shipmentNo: data?.['Shipment Number'],
+          transporterName: data?.['Transporter Name'],
+          shipmentCostDate: data?.['Shipment Cost Date'],
+          serviceAgent: data?.['Service agent'],
+          ownership: data?.['Ownership'],
+          totalInvoiceAmt: data?.['Total Invoice Amount'],
+          userDisplayName: this.authenticationService.currentUser?.displayName,
+          userEmail: this.authenticationService.currentUser?.email,
+        }
+      );
+  }
+
+  //Upload Excel
+  xlUpload(event: any): void {
+    let reader = new FileReader();
+    reader.readAsBinaryString(event.target.files[0]);
+    reader.onload = (e: any) => {
+      if (e != null) {
+        let spreadSheetWorkBook = read(e.target.result, { type: 'binary' });
+        console.log('spreadSheetFile', spreadSheetWorkBook);
+        const data = utils.sheet_to_json<any>(
+          spreadSheetWorkBook.Sheets[spreadSheetWorkBook.SheetNames[0]]
+        );
+        for (let i = 0; i < data.length; i++) this.uploadDataXl(data[i]);
+      }
+    };
   }
 }
