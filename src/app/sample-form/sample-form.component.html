@@ -223,8 +223,8 @@
             class="grid grid-cols-2 gap-24 items-center"
             *ngFor="let item of data | keyvalue"
           >
-            <p>{{ item.key }}:</p>
-            <p>{{ item.value }}</p>
+            <p *ngIf="item.key !== 'id'">{{ item.key }}:</p>
+            <p *ngIf="item.key !== 'id'">{{ item.value }}</p>
           </div>
         </div>
         <div class="flex p-3 justify-evenly items-center">

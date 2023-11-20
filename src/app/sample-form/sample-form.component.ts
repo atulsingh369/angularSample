@@ -285,11 +285,7 @@ export class SampleFormComponent implements OnInit, OnChanges {
   //FireStore
   saveData(id: any): void {
     setDoc(
-      doc(
-        this.firestore,
-        'invoices',
-        id ? `${id}` : `invoiceNo - ${this.invoiceNo.value}`
-      ),
+      doc(this.firestore, 'invoices', id ? `${id}` : `${this.invoiceNo.value}`),
       {
         vehicleNo: this.vehicleNo.value,
         wsCode: this.wsCode.value,
@@ -298,6 +294,7 @@ export class SampleFormComponent implements OnInit, OnChanges {
         distance: this.distance.value,
         KOT: this.KOT.value,
         mlrNo: this.mlrNo.value,
+        gstInvoiceNo: this.invoiceNo.value,
         labour: this.labour.value,
         deiselVoucherNo: this.deiselVoucherNo.value,
         deiselAmt: this.deiselAmt.value,
@@ -310,6 +307,19 @@ export class SampleFormComponent implements OnInit, OnChanges {
         mlrAckn: this.mlrAckn.value,
         userDisplayName: this.authenticationService.currentUser?.displayName,
         userEmail: this.authenticationService.currentUser?.email,
+
+        billingDate: this.vehicleNo.value,
+        soldToParty: this.vehicleNo.value,
+        customerName: this.vehicleNo.value,
+        billingDoc: this.vehicleNo.value,
+        invoiceNo: this.vehicleNo.value,
+        totalInvoiceAmt: this.vehicleNo.value,
+        salesShipmentDiff: this.vehicleNo.value,
+        shipmentNo: this.vehicleNo.value,
+        shipmentCostDate: this.vehicleNo.value,
+        transporterName: this.vehicleNo.value,
+        serviceAgent: this.vehicleNo.value,
+        ownership: this.vehicleNo.value,
       }
     );
   }
@@ -444,8 +454,27 @@ export class SampleFormComponent implements OnInit, OnChanges {
     this.update = false;
   }
 
+  //Upload Excel
+  xlUpload(event: any): void {
+    let reader = new FileReader();
+    reader.readAsBinaryString(event.target.files[0]);
+    reader.onload = (e: any) => {
+      if (e != null) {
+        let spreadSheetWorkBook = read(e.target.result, { type: 'binary' });
+        const data = utils.sheet_to_json<any>(
+          spreadSheetWorkBook.Sheets[spreadSheetWorkBook.SheetNames[0]]
+        );
+        for (let i = 0; i < data.length; i++) {
+          this.uploadDataXl(data[i]);
+          // console.log(data[i]);
+        }
+        this.getInvoices();
+      }
+    };
+  }
+
   uploadDataXl(data: any): void {
-    if (data?.['Custom Invoice No'])
+    if (data?.['Custom Invoice No'] && data?.['Customer Name'])
       setDoc(
         doc(this.firestore, 'invoices', `${data?.['Custom Invoice No']}`),
         {
@@ -467,7 +496,7 @@ export class SampleFormComponent implements OnInit, OnChanges {
           billingDate: data?.['Billing Date'],
           soldToParty: data?.['Sold-To Party'],
           billingDoc: data?.['Billing Document'],
-          invoiceNo: data?.['GST Invoice 0'],
+          gstInvoiceNo: data?.['GST Invoice Number'],
           salesShipmentDiff: data?.['Sales Value Minus Shipment Cost'],
           shipmentNo: data?.['Shipment Number'],
           transporterName: data?.['Transporter Name'],
@@ -479,21 +508,5 @@ export class SampleFormComponent implements OnInit, OnChanges {
           userEmail: this.authenticationService.currentUser?.email,
         }
       );
-  }
-
-  //Upload Excel
-  xlUpload(event: any): void {
-    let reader = new FileReader();
-    reader.readAsBinaryString(event.target.files[0]);
-    reader.onload = (e: any) => {
-      if (e != null) {
-        let spreadSheetWorkBook = read(e.target.result, { type: 'binary' });
-        console.log('spreadSheetFile', spreadSheetWorkBook);
-        const data = utils.sheet_to_json<any>(
-          spreadSheetWorkBook.Sheets[spreadSheetWorkBook.SheetNames[0]]
-        );
-        for (let i = 0; i < data.length; i++) this.uploadDataXl(data[i]);
-      }
-    };
   }
 }
