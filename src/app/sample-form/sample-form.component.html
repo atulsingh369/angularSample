@@ -491,6 +491,7 @@
           <label>Vehicle No</label>
           <input
             type="text"
+            [placeholder]="updateData.vehicleNo"
             name="vehicleNo"
             class="border-2 border-blue-500 rounded-xl px-2 py-1"
             [formControl]="vehicleNo"
@@ -498,8 +499,20 @@
         </div>
 
         <div class="grid grid-cols-2 gap-6 items-center">
+          <label>Customer Name</label>
+          <input
+            type="text"
+            [placeholder]="updateData.customerName"
+            name="customerName"
+            class="border-2 border-blue-500 rounded-xl px-2 py-1"
+            [formControl]="customerName"
+          />
+        </div>
+
+        <div class="grid grid-cols-2 gap-6 items-center">
           <label>W/S Code</label>
           <input
+            [placeholder]="updateData.wsCode"
             type="text"
             name="wsCode"
             class="border-2 border-blue-500 rounded-xl px-2 py-1"
@@ -509,6 +522,7 @@
         <div class="grid grid-cols-2 gap-6 items-center">
           <label>W/S Name</label>
           <input
+            [placeholder]="updateData.wsName"
             type="text"
             name="wsName"
             class="border-2 border-blue-500 rounded-xl px-2 py-1"
@@ -518,6 +532,7 @@
         <div class="grid grid-cols-2 gap-6 items-center">
           <label>W/S Town</label>
           <input
+            [placeholder]="updateData.wsTown"
             type="text"
             name="wsTown"
             class="border-2 border-blue-500 rounded-xl px-2 py-1"
@@ -527,6 +542,7 @@
         <div class="grid grid-cols-2 gap-6 items-center">
           <label>Distance</label>
           <input
+            [placeholder]="updateData.distance"
             type="number"
             name="distance"
             class="border-2 border-blue-500 rounded-xl px-2 py-1"
@@ -541,6 +557,7 @@
         <div class="grid grid-cols-2 gap-6 items-center">
           <label>KOT</label>
           <input
+            [placeholder]="updateData.KOT"
             type="text"
             name="KOT"
             class="border-2 border-blue-500 rounded-xl px-2 py-1"
@@ -550,6 +567,7 @@
         <div class="grid grid-cols-2 gap-6 items-center">
           <label>MLR No</label>
           <input
+            [placeholder]="updateData.mlrNo"
             type="text"
             name="mlrNo"
             class="border-2 border-blue-500 rounded-xl px-2 py-1"
@@ -559,6 +577,7 @@
         <div class="grid grid-cols-2 gap-6 items-center">
           <label>Labour</label>
           <input
+            [placeholder]="updateData.labour"
             type="text"
             name="labour"
             class="border-2 border-blue-500 rounded-xl px-2 py-1"
@@ -568,6 +587,7 @@
         <div class="grid grid-cols-2 gap-6 items-center">
           <label>Diesel Voucher Number</label>
           <input
+            [placeholder]="updateData.deiselVoucherNo"
             type="text"
             name="deiselVoucherNo"
             class="border-2 border-blue-500 rounded-xl px-2 py-1"
@@ -577,6 +597,7 @@
         <div class="grid grid-cols-2 gap-6 items-center">
           <label>Diesel Amount</label>
           <input
+            [placeholder]="updateData.deiselAmt"
             type="text"
             name="deiselAmt"
             class="border-2 border-blue-500 rounded-xl px-2 py-1"
@@ -594,6 +615,7 @@
         <div class="grid grid-cols-2 gap-6 items-center">
           <label>Khuraki</label>
           <input
+            [placeholder]="updateData.Khuraki"
             type="text"
             name="khuraki"
             class="border-2 border-blue-500 rounded-xl px-2 py-1"
@@ -603,6 +625,7 @@
         <div class="grid grid-cols-2 gap-6 items-center">
           <label>Freight</label>
           <input
+            [placeholder]="updateData.frieght"
             type="text"
             name="frieght"
             class="border-2 border-blue-500 rounded-xl px-2 py-1"
@@ -612,6 +635,7 @@
         <div class="grid grid-cols-2 gap-6 items-center">
           <label>Toll</label>
           <input
+            [placeholder]="updateData.toll"
             type="text"
             name="toll"
             class="border-2 border-blue-500 rounded-xl px-2 py-1"
@@ -621,6 +645,7 @@
         <div class="grid grid-cols-2 gap-6 items-center">
           <label>Repairs</label>
           <input
+            [placeholder]="updateData.repairs"
             type="text"
             name="repairs"
             class="border-2 border-blue-500 rounded-xl px-2 py-1"
@@ -630,34 +655,46 @@
       </div>
       <div class="space-y-4">
         <p class="text-2xl text-center underline underline-offset-2">
-          Post Delivery
+          Billing Details
         </p>
         <div class="grid grid-cols-2 gap-6 items-center">
-          <label>Cash expense</label>
+          <label>Billing Data</label>
           <input
+            [placeholder]="updateData.billingDate"
             type="text"
-            name="cashExp"
+            name="billingDate"
             class="border-2 border-blue-500 rounded-xl px-2 py-1"
-            [formControl]="cashExp"
-          />
-        </div>
-
-        <div class="grid grid-cols-2 gap-6 items-center">
-          <label>Invoice Ackn</label>
-          <input
-            type="text"
-            name="invoiceAckn"
-            class="border-2 border-blue-500 rounded-xl px-2 py-1"
-            [formControl]="invoiceAckn"
+            [formControl]="billingDate"
           />
         </div>
         <div class="grid grid-cols-2 gap-6 items-center">
-          <label>MLR Ackn</label>
+          <label>Billing Document</label>
           <input
+            [placeholder]="updateData.billingDoc"
             type="text"
-            name="mlrAckn"
+            name="billingDoc"
             class="border-2 border-blue-500 rounded-xl px-2 py-1"
-            [formControl]="mlrAckn"
+            [formControl]="billingDoc"
+          />
+        </div>
+        <div class="grid grid-cols-2 gap-6 items-center">
+          <label>GST Invoice No</label>
+          <input
+            [placeholder]="updateData.gstInvoiceNo"
+            type="text"
+            name="gstInvoiceNo"
+            class="border-2 border-blue-500 rounded-xl px-2 py-1"
+            [formControl]="gstInvoiceNo"
+          />
+        </div>
+        <div class="grid grid-cols-2 gap-6 items-center">
+          <label>Ownership</label>
+          <input
+            [placeholder]="updateData.ownership"
+            type="text"
+            name="ownership"
+            class="border-2 border-blue-500 rounded-xl px-2 py-1"
+            [formControl]="ownership"
           />
         </div>
       </div>

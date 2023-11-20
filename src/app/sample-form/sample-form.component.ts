@@ -44,20 +44,35 @@ export class SampleFormComponent implements OnInit, OnChanges {
   wsCode = new FormControl('');
   wsName = new FormControl('');
   wsTown = new FormControl('');
-  distance = new FormControl('');
-  KOT = new FormControl('');
-  mlrNo = new FormControl('');
+  distance = new FormControl();
   labour = new FormControl('');
+  mlrNo = new FormControl();
+  frieght = new FormControl();
   deiselVoucherNo = new FormControl('');
-  deiselAmt = new FormControl('');
-  Khuraki = new FormControl('');
-  frieght = new FormControl('');
-  toll = new FormControl('');
-  repairs = new FormControl('');
+  deiselAmt = new FormControl();
+  Khuraki = new FormControl();
+  toll = new FormControl();
+  repairs = new FormControl();
   cashExp = new FormControl('');
+  ownership = new FormControl('');
   invoiceAckn = new FormControl('');
   mlrAckn = new FormControl('');
   resPass = new FormControl('');
+  billingDate = new FormControl('');
+  soldToParty = new FormControl();
+  customerName = new FormControl('');
+  billingDoc = new FormControl('');
+  gstInvoiceNo = new FormControl('');
+  KOT = new FormControl();
+  totalInvoiceAmt = new FormControl();
+  salesShipmentDiff = new FormControl();
+  shipmentNo = new FormControl();
+  shipmentCostDate = new FormControl('');
+  transporterName = new FormControl('');
+  serviceAgent = new FormControl('');
+  ownershipnew = new FormControl('');
+  userDisplayName = new FormControl('');
+  userEmail = new FormControl('');
 
   user: any;
   public loggedIn: boolean = false;
@@ -287,39 +302,101 @@ export class SampleFormComponent implements OnInit, OnChanges {
     setDoc(
       doc(this.firestore, 'invoices', id ? `${id}` : `${this.invoiceNo.value}`),
       {
-        vehicleNo: this.vehicleNo.value,
-        wsCode: this.wsCode.value,
-        wsName: this.wsName.value,
-        wsTown: this.wsTown.value,
-        distance: this.distance.value,
-        KOT: this.KOT.value,
-        mlrNo: this.mlrNo.value,
-        gstInvoiceNo: this.invoiceNo.value,
-        labour: this.labour.value,
-        deiselVoucherNo: this.deiselVoucherNo.value,
-        deiselAmt: this.deiselAmt.value,
-        Khuraki: this.Khuraki.value,
-        frieght: this.frieght.value,
-        toll: this.toll.value,
-        repairs: this.repairs.value,
+        vehicleNo:
+          this.vehicleNo.value !== ''
+            ? this.vehicleNo.value
+            : this.updateData.vehicleNo,
+        wsCode:
+          this.wsCode.value !== '' ? this.wsCode.value : this.updateData.wsCode,
+        wsName:
+          this.wsName.value !== '' ? this.wsName.value : this.updateData.wsName,
+        wsTown:
+          this.wsTown.value !== '' ? this.wsTown.value : this.updateData.wsTown,
+        distance:
+          this.distance.value !== ''
+            ? this.distance.value
+            : this.updateData.distance,
+        KOT: this.KOT.value !== '' ? this.KOT.value : this.updateData.KOT,
+        mlrNo:
+          this.mlrNo.value !== '' ? this.mlrNo.value : this.updateData.mlrNo,
+        gstInvoiceNo:
+          this.gstInvoiceNo.value !== ''
+            ? this.gstInvoiceNo.value
+            : this.updateData.gstInvoiceNo,
+        labour:
+          this.labour.value !== '' ? this.labour.value : this.updateData.labour,
+        deiselVoucherNo:
+          this.deiselVoucherNo.value !== ''
+            ? this.deiselVoucherNo.value
+            : this.updateData.deiselVoucherNo,
+        deiselAmt:
+          this.deiselAmt.value !== ''
+            ? this.deiselAmt.value
+            : this.updateData.deiselAmt,
+        Khuraki:
+          this.Khuraki.value !== ''
+            ? this.Khuraki.value
+            : this.updateData.Khuraki,
+        frieght:
+          this.vehicleNo.value !== ''
+            ? this.vehicleNo.value
+            : this.updateData.vehicleNo,
+        toll: this.toll.value !== '' ? this.toll.value : this.updateData.toll,
+        repairs:
+          this.repairs.value !== ''
+            ? this.repairs.value
+            : this.updateData.repairs,
         cashExp: this.cashExp.value,
-        invoiceAckn: this.invoiceAckn.value,
-        mlrAckn: this.mlrAckn.value,
+        invoiceAckn: this.vehicleNo.value,
+        mlrAckn: this.vehicleNo.value,
         userDisplayName: this.authenticationService.currentUser?.displayName,
         userEmail: this.authenticationService.currentUser?.email,
 
-        billingDate: this.vehicleNo.value,
-        soldToParty: this.vehicleNo.value,
-        customerName: this.vehicleNo.value,
-        billingDoc: this.vehicleNo.value,
-        invoiceNo: this.vehicleNo.value,
-        totalInvoiceAmt: this.vehicleNo.value,
-        salesShipmentDiff: this.vehicleNo.value,
-        shipmentNo: this.vehicleNo.value,
-        shipmentCostDate: this.vehicleNo.value,
-        transporterName: this.vehicleNo.value,
-        serviceAgent: this.vehicleNo.value,
-        ownership: this.vehicleNo.value,
+        billingDate:
+          this.billingDate.value !== ''
+            ? this.billingDate.value
+            : this.updateData.billingDate,
+        soldToParty:
+          this.soldToParty.value !== ''
+            ? this.soldToParty.value
+            : this.updateData.soldToParty,
+        customerName:
+          this.customerName.value !== ''
+            ? this.customerName.value
+            : this.updateData.customerName,
+        billingDoc:
+          this.billingDoc.value !== ''
+            ? this.billingDoc.value
+            : this.updateData.billingDoc,
+
+        totalInvoiceAmt:
+          this.totalInvoiceAmt.value !== ''
+            ? this.totalInvoiceAmt.value
+            : this.updateData.totalInvoiceAmt,
+        salesShipmentDiff:
+          this.salesShipmentDiff.value !== ''
+            ? this.salesShipmentDiff.value
+            : this.updateData.salesShipmentDiff,
+        shipmentNo:
+          this.shipmentNo.value !== ''
+            ? this.shipmentNo.value
+            : this.updateData.shipmentNo,
+        shipmentCostDate:
+          this.shipmentCostDate.value !== ''
+            ? this.shipmentCostDate.value
+            : this.updateData.shipmentCostDate,
+        transporterName:
+          this.transporterName.value !== ''
+            ? this.transporterName.value
+            : this.updateData.transporterName,
+        serviceAgent:
+          this.serviceAgent.value !== ''
+            ? this.serviceAgent.value
+            : this.updateData.serviceAgent,
+        ownership:
+          this.ownership.value !== ''
+            ? this.ownership.value
+            : this.updateData.ownership,
       }
     );
   }
@@ -369,9 +446,35 @@ export class SampleFormComponent implements OnInit, OnChanges {
     const docSnap = getDoc(doc(this.firestore, 'invoices', `${id}`)).then(
       (doc) => {
         if (doc.exists()) {
-          this.updateData.invoiceNo = doc.data()?.['invoiceNo'];
+          this.updateData.gstInvoiceNo = doc.data()?.['gstInvoiceNo'];
           this.updateData.vehicleNo = doc.data()?.['vehicleNo'];
-          this.gotData = true;
+          (this.updateData.customerName = doc.data()?.['customerName']),
+            (this.updateData.wsCode = doc.data()?.['wsCode']);
+          this.updateData.wsName = doc.data()?.['wsName'];
+          this.updateData.wsTown = doc.data()?.['wsTown'];
+          this.updateData.distance = doc.data()?.['distance'];
+          (this.updateData.KOT = doc.data()?.['KOT']),
+            (this.updateData.mlrNo = doc.data()?.['mlrNo']),
+            (this.updateData.labour = doc.data()?.['labour']);
+          this.updateData.deiselVoucherNo = doc.data()?.['deiselVoucherNo'];
+          this.updateData.deiselAmt = doc.data()?.['deiselAmt'];
+          this.updateData.Khuraki = doc.data()?.['Khuraki'];
+          (this.updateData.frieght = doc.data()?.['frieght']),
+            (this.updateData.toll = doc.data()?.['toll']);
+          this.updateData.repairs = doc.data()?.['repairs'];
+          (this.updateData.billingDate = doc.data()?.['billingDate']),
+            (this.updateData.soldToParty = doc.data()?.['soldToParty']),
+            (this.updateData.billingDoc = doc.data()?.['billingDoc']),
+            (this.updateData.salesShipmentDiff =
+              doc.data()?.['salesShipmentDiff']),
+            (this.updateData.shipmentNo = doc.data()?.['shipmentNo']),
+            (this.updateData.transporterName = doc.data()?.['transporterName']),
+            (this.updateData.shipmentCostDate =
+              doc.data()?.['shipmentCostDate']),
+            (this.updateData.serviceAgent = doc.data()?.['serviceAgent']),
+            (this.updateData.ownership = doc.data()?.['ownership']),
+            (this.updateData.totalInvoiceAmt = doc.data()?.['totalInvoiceAmt']),
+            (this.gotData = true);
         } else {
           alert('No Data Found');
           this.resetForm();
