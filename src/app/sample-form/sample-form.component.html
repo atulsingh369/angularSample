@@ -274,7 +274,7 @@
     class="flex flex-col items-center w-screen space-y-4 my-20"
   >
     <div class="grid grid-cols-2 gap-6 items-center">
-      <label>Invoice No</label>
+      <label>GST Invoice No</label>
       <input
         type="text"
         name="invoiceNo"
@@ -282,6 +282,15 @@
         required="true"
         [formControl]="invoiceNo"
       />
+      <!-- validators -->
+      <div
+        class="col-span-2 text-center -my-5"
+        *ngIf="(vehicleNo?.invalid && vehicleNo?.touched) || vehicleNo?.dirty"
+      >
+        <small *ngIf="vehicleNo?.errors?.['required']" class="text-red-500">
+          GST Invoice No is required
+        </small>
+      </div>
     </div>
 
     <div class="grid grid-cols-2 gap-96 items-center">
@@ -299,6 +308,17 @@
             class="border-2 border-blue-500 rounded-xl px-2 py-1"
             [formControl]="vehicleNo"
           />
+          <!-- validators -->
+          <div
+            class="col-span-2 text-center -my-5"
+            *ngIf="
+              (vehicleNo?.invalid && vehicleNo?.touched) || vehicleNo?.dirty
+            "
+          >
+            <small *ngIf="vehicleNo?.errors?.['required']" class="text-red-500">
+              required
+            </small>
+          </div>
         </div>
 
         <div class="grid grid-cols-2 gap-6 items-center">
@@ -309,7 +329,17 @@
             class="border-2 border-blue-500 rounded-xl px-2 py-1"
             [formControl]="wsCode"
           />
+          <!-- validators -->
+          <div
+            class="col-span-2 text-center -my-5"
+            *ngIf="(wsCode?.invalid && wsCode?.touched) || wsCode?.dirty"
+          >
+            <small *ngIf="wsCode?.errors?.['required']" class="text-red-500">
+              required
+            </small>
+          </div>
         </div>
+
         <div class="grid grid-cols-2 gap-6 items-center">
           <label>W/S Name</label>
           <input
@@ -318,7 +348,17 @@
             class="border-2 border-blue-500 rounded-xl px-2 py-1"
             [formControl]="wsName"
           />
+          <!-- validators -->
+          <div
+            class="col-span-2 text-center -my-5"
+            *ngIf="(wsName?.invalid && wsName?.touched) || wsName?.dirty"
+          >
+            <small *ngIf="wsName?.errors?.['required']" class="text-red-500">
+              required
+            </small>
+          </div>
         </div>
+
         <div class="grid grid-cols-2 gap-6 items-center">
           <label>W/S Town</label>
           <input
@@ -327,7 +367,17 @@
             class="border-2 border-blue-500 rounded-xl px-2 py-1"
             [formControl]="wsTown"
           />
+          <!-- validators -->
+          <div
+            class="col-span-2 text-center -my-5"
+            *ngIf="(wsTown?.invalid && wsTown?.touched) || wsTown?.dirty"
+          >
+            <small *ngIf="wsTown?.errors?.['required']" class="text-red-500">
+              required
+            </small>
+          </div>
         </div>
+
         <div class="grid grid-cols-2 gap-6 items-center">
           <label>Distance</label>
           <input
@@ -336,30 +386,61 @@
             class="border-2 border-blue-500 rounded-xl px-2 py-1"
             [formControl]="distance"
           />
+          <!-- validators -->
+          <div
+            class="col-span-2 text-center -my-5"
+            *ngIf="(distance?.invalid && distance?.touched) || distance?.dirty"
+          >
+            <small *ngIf="distance?.errors?.['required']" class="text-red-500">
+              required
+            </small>
+          </div>
         </div>
       </div>
+
       <div class="space-y-4">
         <p class="text-2xl text-center underline underline-offset-2">
           Shipment Details
         </p>
+
         <div class="grid grid-cols-2 gap-6 items-center">
           <label>KOT</label>
           <input
-            type="text"
+            type="number"
             name="KOT"
             class="border-2 border-blue-500 rounded-xl px-2 py-1"
             [formControl]="KOT"
           />
+          <!-- validators -->
+          <div
+            class="col-span-2 text-center -my-5"
+            *ngIf="(KOT?.invalid && KOT?.touched) || KOT?.dirty"
+          >
+            <small *ngIf="KOT?.errors?.['required']" class="text-red-500">
+              required
+            </small>
+          </div>
         </div>
+
         <div class="grid grid-cols-2 gap-6 items-center">
           <label>MLR No</label>
           <input
-            type="text"
+            type="number"
             name="mlrNo"
             class="border-2 border-blue-500 rounded-xl px-2 py-1"
             [formControl]="mlrNo"
           />
+          <!-- validators -->
+          <div
+            class="col-span-2 text-center -my-5"
+            *ngIf="(mlrNo?.invalid && mlrNo?.touched) || mlrNo?.dirty"
+          >
+            <small *ngIf="mlrNo?.errors?.['required']" class="text-red-500">
+              required
+            </small>
+          </div>
         </div>
+
         <div class="grid grid-cols-2 gap-6 items-center">
           <label>Labour</label>
           <input
@@ -368,24 +449,61 @@
             class="border-2 border-blue-500 rounded-xl px-2 py-1"
             [formControl]="labour"
           />
+          <!-- validators -->
+          <div
+            class="col-span-2 text-center -my-5"
+            *ngIf="(labour?.invalid && labour?.touched) || labour?.dirty"
+          >
+            <small *ngIf="labour?.errors?.['required']" class="text-red-500">
+              required
+            </small>
+          </div>
         </div>
+
         <div class="grid grid-cols-2 gap-6 items-center">
           <label>Diesel Voucher Number</label>
           <input
-            type="text"
+            type="number"
             name="deiselVoucherNo"
             class="border-2 border-blue-500 rounded-xl px-2 py-1"
             [formControl]="deiselVoucherNo"
           />
+          <!-- validators -->
+          <div
+            class="col-span-2 text-center -my-5"
+            *ngIf="
+              (deiselVoucherNo?.invalid && deiselVoucherNo?.touched) ||
+              deiselVoucherNo?.dirty
+            "
+          >
+            <small
+              *ngIf="deiselVoucherNo?.errors?.['required']"
+              class="text-red-500"
+            >
+              required
+            </small>
+          </div>
         </div>
+
         <div class="grid grid-cols-2 gap-6 items-center">
           <label>Diesel Amount</label>
           <input
-            type="text"
+            type="number"
             name="deiselAmt"
             class="border-2 border-blue-500 rounded-xl px-2 py-1"
             [formControl]="deiselAmt"
           />
+          <!-- validators -->
+          <div
+            class="col-span-2 text-center -my-5"
+            *ngIf="
+              (deiselAmt?.invalid && deiselAmt?.touched) || deiselAmt?.dirty
+            "
+          >
+            <small *ngIf="deiselAmt?.errors?.['required']" class="text-red-500">
+              required
+            </small>
+          </div>
         </div>
       </div>
     </div>
@@ -395,41 +513,81 @@
         <p class="text-2xl text-center underline underline-offset-2">
           Cash Expense
         </p>
+
         <div class="grid grid-cols-2 gap-6 items-center">
           <label>Khuraki</label>
           <input
-            type="text"
+            type="number"
             name="khuraki"
             class="border-2 border-blue-500 rounded-xl px-2 py-1"
             [formControl]="Khuraki"
           />
+          <!-- validators -->
+          <div
+            class="col-span-2 text-center -my-5"
+            *ngIf="(Khuraki?.invalid && Khuraki?.touched) || Khuraki?.dirty"
+          >
+            <small *ngIf="Khuraki?.errors?.['required']" class="text-red-500">
+              required
+            </small>
+          </div>
         </div>
+
         <div class="grid grid-cols-2 gap-6 items-center">
           <label>Freight</label>
           <input
-            type="text"
+            type="number"
             name="frieght"
             class="border-2 border-blue-500 rounded-xl px-2 py-1"
             [formControl]="frieght"
           />
+          <!-- validators -->
+          <div
+            class="col-span-2 text-center -my-5"
+            *ngIf="(frieght?.invalid && frieght?.touched) || frieght?.dirty"
+          >
+            <small *ngIf="frieght?.errors?.['required']" class="text-red-500">
+              required
+            </small>
+          </div>
         </div>
+
         <div class="grid grid-cols-2 gap-6 items-center">
           <label>Toll</label>
           <input
-            type="text"
+            type="number"
             name="toll"
             class="border-2 border-blue-500 rounded-xl px-2 py-1"
             [formControl]="toll"
           />
+          <!-- validators -->
+          <div
+            class="col-span-2 text-center -my-5"
+            *ngIf="(toll?.invalid && toll?.touched) || toll?.dirty"
+          >
+            <small *ngIf="toll?.errors?.['required']" class="text-red-500">
+              required
+            </small>
+          </div>
         </div>
+
         <div class="grid grid-cols-2 gap-6 items-center">
           <label>Repairs</label>
           <input
-            type="text"
+            type="number"
             name="repairs"
             class="border-2 border-blue-500 rounded-xl px-2 py-1"
             [formControl]="repairs"
           />
+          <!-- validators -->
+          <div
+            class="col-span-2 text-center -my-5"
+            *ngIf="(repairs?.invalid && repairs?.touched) || repairs?.dirty"
+          >
+            <small *ngIf="repairs?.errors?.['required']" class="text-red-500">
+              required
+            </small>
+          </div>
         </div>
       </div>
       <div class="space-y-4">
@@ -439,11 +597,20 @@
         <div class="grid grid-cols-2 gap-6 items-center">
           <label>Cash expense</label>
           <input
-            type="text"
+            type="number"
             name="cashExp"
             class="border-2 border-blue-500 rounded-xl px-2 py-1"
             [formControl]="cashExp"
           />
+          <!-- validators -->
+          <div
+            class="col-span-2 text-center -my-5"
+            *ngIf="(cashExp?.invalid && cashExp?.touched) || cashExp?.dirty"
+          >
+            <small *ngIf="cashExp?.errors?.['required']" class="text-red-500">
+              required
+            </small>
+          </div>
         </div>
 
         <div class="grid grid-cols-2 gap-6 items-center">
@@ -454,7 +621,23 @@
             class="border-2 border-blue-500 rounded-xl px-2 py-1"
             [formControl]="invoiceAckn"
           />
+          <!-- validators -->
+          <div
+            class="col-span-2 text-center -my-5"
+            *ngIf="
+              (invoiceAckn?.invalid && invoiceAckn?.touched) ||
+              invoiceAckn?.dirty
+            "
+          >
+            <small
+              *ngIf="invoiceAckn?.errors?.['required']"
+              class="text-red-500"
+            >
+              required
+            </small>
+          </div>
         </div>
+
         <div class="grid grid-cols-2 gap-6 items-center">
           <label>MLR Ackn</label>
           <input
@@ -463,6 +646,15 @@
             class="border-2 border-blue-500 rounded-xl px-2 py-1"
             [formControl]="mlrAckn"
           />
+          <!-- validators -->
+          <div
+            class="col-span-2 text-center -my-5"
+            *ngIf="(mlrAckn?.invalid && mlrAckn?.touched) || mlrAckn?.dirty"
+          >
+            <small *ngIf="mlrAckn?.errors?.['required']" class="text-red-500">
+              required
+            </small>
+          </div>
         </div>
       </div>
     </div>

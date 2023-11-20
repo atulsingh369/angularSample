@@ -5,7 +5,7 @@ export interface InvoiceData {
   billingDoc: string;
   invoiceNo: string;
   gstInvoiceNo: string;
-  KOT: number;
+  KOT: any;
   totalInvoiceAmt: number;
   salesShipmentDiff: number;
   shipmentNo: number;

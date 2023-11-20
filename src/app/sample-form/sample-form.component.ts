@@ -39,40 +39,40 @@ import { InvoiceData } from './sample-form.interface';
 })
 export class SampleFormComponent implements OnInit, OnChanges {
   // Form Variables
-  invoiceNo = new FormControl('');
-  vehicleNo = new FormControl('');
-  wsCode = new FormControl('');
-  wsName = new FormControl('');
-  wsTown = new FormControl('');
+  invoiceNo = new FormControl('', [Validators.required]);
+  vehicleNo = new FormControl('', [Validators.required]);
+  wsCode = new FormControl('', [Validators.required]);
+  wsName = new FormControl('', [Validators.required]);
+  wsTown = new FormControl('', [Validators.required]);
   distance = new FormControl();
-  labour = new FormControl('');
-  mlrNo = new FormControl();
-  frieght = new FormControl();
-  deiselVoucherNo = new FormControl('');
-  deiselAmt = new FormControl();
-  Khuraki = new FormControl();
-  toll = new FormControl();
-  repairs = new FormControl();
-  cashExp = new FormControl('');
-  ownership = new FormControl('');
-  invoiceAckn = new FormControl('');
-  mlrAckn = new FormControl('');
-  resPass = new FormControl('');
-  billingDate = new FormControl('');
-  soldToParty = new FormControl();
-  customerName = new FormControl('');
-  billingDoc = new FormControl('');
-  gstInvoiceNo = new FormControl('');
-  KOT = new FormControl();
-  totalInvoiceAmt = new FormControl();
-  salesShipmentDiff = new FormControl();
-  shipmentNo = new FormControl();
-  shipmentCostDate = new FormControl('');
-  transporterName = new FormControl('');
-  serviceAgent = new FormControl('');
-  ownershipnew = new FormControl('');
-  userDisplayName = new FormControl('');
-  userEmail = new FormControl('');
+  labour = new FormControl('', [Validators.required]);
+  mlrNo = new FormControl([Validators.required]);
+  frieght = new FormControl([Validators.required]);
+  deiselVoucherNo = new FormControl('', [Validators.required]);
+  deiselAmt = new FormControl([Validators.required]);
+  Khuraki = new FormControl([Validators.required]);
+  toll = new FormControl([Validators.required]);
+  repairs = new FormControl([Validators.required]);
+  cashExp = new FormControl('', [Validators.required]);
+  ownership = new FormControl('', [Validators.required]);
+  invoiceAckn = new FormControl('', [Validators.required]);
+  mlrAckn = new FormControl('', [Validators.required]);
+  resPass = new FormControl('', [Validators.required]);
+  billingDate = new FormControl('', [Validators.required]);
+  soldToParty = new FormControl([Validators.required]);
+  customerName = new FormControl('', [Validators.required]);
+  billingDoc = new FormControl('', [Validators.required]);
+  gstInvoiceNo = new FormControl('', [Validators.required]);
+  KOT = new FormControl([Validators.required]);
+  totalInvoiceAmt = new FormControl([Validators.required]);
+  salesShipmentDiff = new FormControl([Validators.required]);
+  shipmentNo = new FormControl([Validators.required]);
+  shipmentCostDate = new FormControl('', [Validators.required]);
+  transporterName = new FormControl('', [Validators.required]);
+  serviceAgent = new FormControl('', [Validators.required]);
+  ownershipnew = new FormControl('', [Validators.required]);
+  userDisplayName = new FormControl('', [Validators.required]);
+  userEmail = new FormControl('', [Validators.required]);
 
   user: any;
   public loggedIn: boolean = false;
@@ -316,12 +316,11 @@ export class SampleFormComponent implements OnInit, OnChanges {
           this.distance.value !== ''
             ? this.distance.value
             : this.updateData.distance,
-        KOT: this.KOT.value !== '' ? this.KOT.value : this.updateData.KOT,
-        mlrNo:
-          this.mlrNo.value !== '' ? this.mlrNo.value : this.updateData.mlrNo,
+        KOT: this.KOT.value ? this.KOT.value : this.updateData.KOT,
+        mlrNo: this.mlrNo.value ? this.mlrNo.value : this.updateData.mlrNo,
         gstInvoiceNo:
           this.gstInvoiceNo.value !== ''
-            ? this.gstInvoiceNo.value
+            ? this.invoiceNo.value
             : this.updateData.gstInvoiceNo,
         labour:
           this.labour.value !== '' ? this.labour.value : this.updateData.labour,
@@ -329,23 +328,19 @@ export class SampleFormComponent implements OnInit, OnChanges {
           this.deiselVoucherNo.value !== ''
             ? this.deiselVoucherNo.value
             : this.updateData.deiselVoucherNo,
-        deiselAmt:
-          this.deiselAmt.value !== ''
-            ? this.deiselAmt.value
-            : this.updateData.deiselAmt,
-        Khuraki:
-          this.Khuraki.value !== ''
-            ? this.Khuraki.value
-            : this.updateData.Khuraki,
-        frieght:
-          this.vehicleNo.value !== ''
-            ? this.vehicleNo.value
-            : this.updateData.vehicleNo,
-        toll: this.toll.value !== '' ? this.toll.value : this.updateData.toll,
-        repairs:
-          this.repairs.value !== ''
-            ? this.repairs.value
-            : this.updateData.repairs,
+        deiselAmt: this.deiselAmt.value
+          ? this.deiselAmt.value
+          : this.updateData.deiselAmt,
+        Khuraki: this.Khuraki.value
+          ? this.Khuraki.value
+          : this.updateData.Khuraki,
+        frieght: this.frieght.value
+          ? this.frieght.value
+          : this.updateData.frieght,
+        toll: this.toll.value ? this.toll.value : this.updateData.toll,
+        repairs: this.repairs.value
+          ? this.repairs.value
+          : this.updateData.repairs,
         cashExp: this.cashExp.value,
         invoiceAckn: this.vehicleNo.value,
         mlrAckn: this.vehicleNo.value,
@@ -356,10 +351,9 @@ export class SampleFormComponent implements OnInit, OnChanges {
           this.billingDate.value !== ''
             ? this.billingDate.value
             : this.updateData.billingDate,
-        soldToParty:
-          this.soldToParty.value !== ''
-            ? this.soldToParty.value
-            : this.updateData.soldToParty,
+        soldToParty: this.soldToParty.value
+          ? this.soldToParty.value
+          : this.updateData.soldToParty,
         customerName:
           this.customerName.value !== ''
             ? this.customerName.value
@@ -369,18 +363,15 @@ export class SampleFormComponent implements OnInit, OnChanges {
             ? this.billingDoc.value
             : this.updateData.billingDoc,
 
-        totalInvoiceAmt:
-          this.totalInvoiceAmt.value !== ''
-            ? this.totalInvoiceAmt.value
-            : this.updateData.totalInvoiceAmt,
-        salesShipmentDiff:
-          this.salesShipmentDiff.value !== ''
-            ? this.salesShipmentDiff.value
-            : this.updateData.salesShipmentDiff,
-        shipmentNo:
-          this.shipmentNo.value !== ''
-            ? this.shipmentNo.value
-            : this.updateData.shipmentNo,
+        totalInvoiceAmt: this.totalInvoiceAmt.value
+          ? this.totalInvoiceAmt.value
+          : this.updateData.totalInvoiceAmt,
+        salesShipmentDiff: this.salesShipmentDiff.value
+          ? this.salesShipmentDiff.value
+          : this.updateData.salesShipmentDiff,
+        shipmentNo: this.shipmentNo.value
+          ? this.shipmentNo.value
+          : this.updateData.shipmentNo,
         shipmentCostDate:
           this.shipmentCostDate.value !== ''
             ? this.shipmentCostDate.value
@@ -399,6 +390,7 @@ export class SampleFormComponent implements OnInit, OnChanges {
             : this.updateData.ownership,
       }
     );
+    this.getInvoices();
   }
 
   delData(id: any): void {
@@ -428,15 +420,8 @@ export class SampleFormComponent implements OnInit, OnChanges {
     this.wsName.setValue('');
     this.wsTown.setValue('');
     this.distance.setValue('');
-    this.KOT.setValue('');
-    this.mlrNo.setValue('');
     this.labour.setValue('');
     this.deiselVoucherNo.setValue('');
-    this.deiselAmt.setValue('');
-    this.Khuraki.setValue('');
-    this.frieght.setValue('');
-    this.toll.setValue('');
-    this.repairs.setValue('');
     this.cashExp.setValue('');
     this.invoiceAckn.setValue('');
     this.mlrAckn.setValue('');
@@ -486,30 +471,32 @@ export class SampleFormComponent implements OnInit, OnChanges {
   }
 
   handleSubmit(id: any): void {
-    const myArray: any[] = [
-      'invoiceNo',
-      'vehicleNo',
-      'wsCode',
-      'wsName',
-      'wsTown',
-      'distance',
-      'KOT',
-      'mlrNo',
-      'labour',
-      'deiselVoucherNo',
-      'deiselAmt',
-      'Khuraki',
-      'frieght',
-      'toll',
-      'repairs',
-      'cashExp',
-      'invoiceAckn',
-      'mlrAckn',
-    ];
-    for (let i = 0; i < myArray.length; i++) {
-      if (myArray[i].value == '') {
-        alert('Enter Details');
-        return;
+    if (!id) {
+      const myArray: any[] = [
+        'invoiceNo',
+        'vehicleNo',
+        'wsCode',
+        'wsName',
+        'wsTown',
+        'distance',
+        'KOT',
+        'mlrNo',
+        'labour',
+        'deiselVoucherNo',
+        'deiselAmt',
+        'Khuraki',
+        'frieght',
+        'toll',
+        'repairs',
+        'cashExp',
+        'invoiceAckn',
+        'mlrAckn',
+      ];
+      for (let i = 0; i < myArray.length; i++) {
+        if (myArray[i].value == '') {
+          alert('Enter Details');
+          return;
+        }
       }
     }
 
