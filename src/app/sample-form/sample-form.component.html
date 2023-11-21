@@ -7,11 +7,20 @@
     class="flex flex-row-reverse justify-between items-center"
   >
     <button
-      *ngIf="log == false && user != null"
+      *ngIf="log == false && user"
       [matMenuTriggerFor]="menu"
-      class="px-4 py-2 w-48 border-2 border-green-500 items-center flex justify-evenly float-right bg-blue-500 text-white text-2xl rounded-xl"
+      class="px-4 py-2 w-48 border-2 w-48 border-green-500 items-center flex justify-evenly float-right bg-blue-500 text-white text-2xl rounded-xl"
     >
-      <mat-icon>account_circle</mat-icon>
+      <img
+        *ngIf="user.photoURL"
+        class="rounded-full h-10"
+        [src]="user.photoURL"
+        alt="user"
+      />
+      <span class="items-center" *ngIf="!user.photoURL"
+        ><mat-icon>account_circle</mat-icon></span
+      >
+
       <span>{{ user.displayName }}</span>
       <mat-menu #menu="matMenu">
         <button (click)="isResPass = true" mat-menu-item>Reset Password</button>
@@ -216,7 +225,7 @@
 
   <!-- Dataset -->
   <div *ngIf="isResPass == false && log == false" class="m-10">
-    <ul class="grid grid-cols-3 gap-10 items-center">
+    <ul class="grid grid-cols-2 gap-10 items-center">
       <li *ngFor="let data of invoicesData" class="">
         <div class="border-2 border-black p-3 rounded-xl h-56 overflow-scroll">
           <div
@@ -246,663 +255,520 @@
     </ul>
   </div>
 
-  <!-- CRUD buttons -->
-  <div>
-    <div
-      *ngIf="log == false && isResPass == false && user != null"
-      class="flex justify-evenly items-center m-5"
+  <!-- Add/Create Invoices -->
+  <div *ngIf="add == true && update == false && del == false">
+    <button
+      (click)="cancel()"
+      class="float-right material-icons text-red-600 text-4xl"
     >
+      cancel
+    </button>
+
+    <form class="flex flex-col items-center w-screen space-y-4 my-20">
+      <div class="grid grid-cols-2 gap-6 items-center">
+        <label>GST Invoice No</label>
+        <input
+          type="text"
+          name="invoiceNo"
+          class="border-2 border-blue-500 rounded-xl px-2 py-1"
+          required="true"
+          [formControl]="invoiceNo"
+        />
+
+        <div
+          class="col-span-2 -my-20 text-center"
+          *ngIf="(invoiceNo?.invalid && invoiceNo?.touched) || invoiceNo?.dirty"
+        >
+          <small *ngIf="invoiceNo?.errors?.['required']" class="text-red-500"
+            >GST Invoice No is required</small
+          >
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-96 items-center">
+        <div class="space-y-4">
+          <p class="text-2xl text-center underline underline-offset-2">
+            Customer Details
+          </p>
+
+          <div class="grid grid-cols-2 gap-6 items-center">
+            <label>Vehicle No</label>
+            <input
+              type="text"
+              required="true"
+              name="vehicleNo"
+              class="border-2 border-blue-500 rounded-xl px-2 py-1"
+              [formControl]="vehicleNo"
+            />
+            <div
+              class="col-span-2 -my-20 text-center"
+              *ngIf="
+                (vehicleNo?.invalid && vehicleNo?.touched) || vehicleNo?.dirty
+              "
+            >
+              <small
+                *ngIf="vehicleNo?.errors?.['required']"
+                class="text-red-500"
+                >Required Field</small
+              >
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-6 items-center">
+            <label>W/S Code</label>
+            <input
+              type="text"
+              name="wsCode"
+              class="border-2 border-blue-500 rounded-xl px-2 py-1"
+              [formControl]="wsCode"
+            />
+            <div
+              class="col-span-2 -my-20 text-center"
+              *ngIf="(wsCode?.invalid && wsCode?.touched) || wsCode?.dirty"
+            >
+              <small *ngIf="wsCode?.errors?.['required']" class="text-red-500"
+                >Required Field</small
+              >
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-6 items-center">
+            <label>W/S Name</label>
+            <input
+              type="text"
+              name="wsName"
+              class="border-2 border-blue-500 rounded-xl px-2 py-1"
+              [formControl]="wsName"
+            />
+            <div
+              class="col-span-2 -my-20 text-center"
+              *ngIf="(wsName?.invalid && wsName?.touched) || wsName?.dirty"
+            >
+              <small *ngIf="wsName?.errors?.['required']" class="text-red-500"
+                >Required Field</small
+              >
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-6 items-center">
+            <label>W/S Town</label>
+            <input
+              type="text"
+              name="wsTown"
+              class="border-2 border-blue-500 rounded-xl px-2 py-1"
+              [formControl]="wsTown"
+            />
+          </div>
+          <div class="grid grid-cols-2 gap-6 items-center">
+            <label>Distance</label>
+            <input
+              type="number"
+              name="distance"
+              class="border-2 border-blue-500 rounded-xl px-2 py-1"
+              [formControl]="distance"
+            />
+          </div>
+        </div>
+        <div class="space-y-4">
+          <p class="text-2xl text-center underline underline-offset-2">
+            Shipment Details
+          </p>
+          <div class="grid grid-cols-2 gap-6 items-center">
+            <label>KOT</label>
+            <input
+              type="number"
+              name="KOT"
+              class="border-2 border-blue-500 rounded-xl px-2 py-1"
+              [formControl]="KOT"
+            />
+          </div>
+          <div class="grid grid-cols-2 gap-6 items-center">
+            <label>MLR No</label>
+            <input
+              type="number"
+              name="mlrNo"
+              class="border-2 border-blue-500 rounded-xl px-2 py-1"
+              [formControl]="mlrNo"
+            />
+          </div>
+          <div class="grid grid-cols-2 gap-6 items-center">
+            <label>Labour</label>
+            <input
+              type="number"
+              name="labour"
+              class="border-2 border-blue-500 rounded-xl px-2 py-1"
+              [formControl]="labour"
+            />
+          </div>
+          <div class="grid grid-cols-2 gap-6 items-center">
+            <label>Diesel Voucher Number</label>
+            <input
+              type="number"
+              name="deiselVoucherNo"
+              class="border-2 border-blue-500 rounded-xl px-2 py-1"
+              [formControl]="deiselVoucherNo"
+            />
+          </div>
+          <div class="grid grid-cols-2 gap-6 items-center">
+            <label>Diesel Amount</label>
+            <input
+              type="number"
+              name="deiselAmt"
+              class="border-2 border-blue-500 rounded-xl px-2 py-1"
+              [formControl]="deiselAmt"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-96 items-center">
+        <div class="space-y-4">
+          <p class="text-2xl text-center underline underline-offset-2">
+            Cash Expense
+          </p>
+          <div class="grid grid-cols-2 gap-6 items-center">
+            <label>Khuraki</label>
+            <input
+              type="number"
+              name="khuraki"
+              class="border-2 border-blue-500 rounded-xl px-2 py-1"
+              [formControl]="Khuraki"
+            />
+          </div>
+          <div class="grid grid-cols-2 gap-6 items-center">
+            <label>Freight</label>
+            <input
+              type="number"
+              name="frieght"
+              class="border-2 border-blue-500 rounded-xl px-2 py-1"
+              [formControl]="frieght"
+            />
+          </div>
+          <div class="grid grid-cols-2 gap-6 items-center">
+            <label>Toll</label>
+            <input
+              type="number"
+              name="toll"
+              class="border-2 border-blue-500 rounded-xl px-2 py-1"
+              [formControl]="toll"
+            />
+          </div>
+          <div class="grid grid-cols-2 gap-6 items-center">
+            <label>Repairs</label>
+            <input
+              type="number"
+              name="repairs"
+              class="border-2 border-blue-500 rounded-xl px-2 py-1"
+              [formControl]="repairs"
+            />
+          </div>
+        </div>
+        <div class="space-y-4">
+          <p class="text-2xl text-center underline underline-offset-2">
+            Post Delivery
+          </p>
+          <div class="grid grid-cols-2 gap-6 items-center">
+            <label>Cash expense</label>
+            <input
+              type="number"
+              name="cashExp"
+              class="border-2 border-blue-500 rounded-xl px-2 py-1"
+              [formControl]="cashExp"
+            />
+          </div>
+
+          <div class="grid grid-cols-2 gap-6 items-center">
+            <label>Invoice Ackn</label>
+            <input
+              type="text"
+              name="invoiceAckn"
+              class="border-2 border-blue-500 rounded-xl px-2 py-1"
+              [formControl]="invoiceAckn"
+            />
+          </div>
+          <div class="grid grid-cols-2 gap-6 items-center">
+            <label>MLR Ackn</label>
+            <input
+              type="text"
+              name="mlrAckn"
+              class="border-2 border-blue-500 rounded-xl px-2 py-1"
+              [formControl]="mlrAckn"
+            />
+          </div>
+        </div>
+      </div>
+
       <button
-        class="px-4 py-2 bg-green-500 text-white text-2xl rounded-xl"
-        (click)="create()"
+        type="submit"
+        (click)="handleSubmit(null)"
+        class="px-4 py-2 bg-blue-500 text-white text-2xl rounded-xl"
       >
-        Add/Create
+        Submit
       </button>
-    </div>
-    <p
-      *ngIf="user == null && log == false"
-      class="text-red-500 text-3xl text-center"
-    >
-      <span *ngIf="invoicesData == null">Login to continue...</span>
-      <span *ngIf="invoicesData != null">Login to create/update...</span>
-    </p>
+    </form>
   </div>
 
-  <!-- Add/Create Invoices -->
-  <form
-    *ngIf="add == true && update == false && del == false"
-    class="flex flex-col items-center w-screen space-y-4 my-20"
-  >
-    <div class="grid grid-cols-2 gap-6 items-center">
-      <label>GST Invoice No</label>
-      <input
-        type="text"
-        name="invoiceNo"
-        class="border-2 border-blue-500 rounded-xl px-2 py-1"
-        required="true"
-        [formControl]="invoiceNo"
-      />
-      <!-- validators -->
-      <div
-        class="col-span-2 text-center -my-5"
-        *ngIf="(vehicleNo?.invalid && vehicleNo?.touched) || vehicleNo?.dirty"
-      >
-        <small *ngIf="vehicleNo?.errors?.['required']" class="text-red-500">
-          GST Invoice No is required
-        </small>
-      </div>
-    </div>
-
-    <div class="grid grid-cols-2 gap-96 items-center">
-      <div class="space-y-4">
-        <p class="text-2xl text-center underline underline-offset-2">
-          Customer Details
-        </p>
-
-        <div class="grid grid-cols-2 gap-6 items-center">
-          <label>Vehicle No</label>
-          <input
-            type="text"
-            required="true"
-            name="vehicleNo"
-            class="border-2 border-blue-500 rounded-xl px-2 py-1"
-            [formControl]="vehicleNo"
-          />
-          <!-- validators -->
-          <div
-            class="col-span-2 text-center -my-5"
-            *ngIf="
-              (vehicleNo?.invalid && vehicleNo?.touched) || vehicleNo?.dirty
-            "
-          >
-            <small *ngIf="vehicleNo?.errors?.['required']" class="text-red-500">
-              required
-            </small>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-2 gap-6 items-center">
-          <label>W/S Code</label>
-          <input
-            type="text"
-            name="wsCode"
-            class="border-2 border-blue-500 rounded-xl px-2 py-1"
-            [formControl]="wsCode"
-          />
-          <!-- validators -->
-          <div
-            class="col-span-2 text-center -my-5"
-            *ngIf="(wsCode?.invalid && wsCode?.touched) || wsCode?.dirty"
-          >
-            <small *ngIf="wsCode?.errors?.['required']" class="text-red-500">
-              required
-            </small>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-2 gap-6 items-center">
-          <label>W/S Name</label>
-          <input
-            type="text"
-            name="wsName"
-            class="border-2 border-blue-500 rounded-xl px-2 py-1"
-            [formControl]="wsName"
-          />
-          <!-- validators -->
-          <div
-            class="col-span-2 text-center -my-5"
-            *ngIf="(wsName?.invalid && wsName?.touched) || wsName?.dirty"
-          >
-            <small *ngIf="wsName?.errors?.['required']" class="text-red-500">
-              required
-            </small>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-2 gap-6 items-center">
-          <label>W/S Town</label>
-          <input
-            type="text"
-            name="wsTown"
-            class="border-2 border-blue-500 rounded-xl px-2 py-1"
-            [formControl]="wsTown"
-          />
-          <!-- validators -->
-          <div
-            class="col-span-2 text-center -my-5"
-            *ngIf="(wsTown?.invalid && wsTown?.touched) || wsTown?.dirty"
-          >
-            <small *ngIf="wsTown?.errors?.['required']" class="text-red-500">
-              required
-            </small>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-2 gap-6 items-center">
-          <label>Distance</label>
-          <input
-            type="number"
-            name="distance"
-            class="border-2 border-blue-500 rounded-xl px-2 py-1"
-            [formControl]="distance"
-          />
-          <!-- validators -->
-          <div
-            class="col-span-2 text-center -my-5"
-            *ngIf="(distance?.invalid && distance?.touched) || distance?.dirty"
-          >
-            <small *ngIf="distance?.errors?.['required']" class="text-red-500">
-              required
-            </small>
-          </div>
-        </div>
-      </div>
-
-      <div class="space-y-4">
-        <p class="text-2xl text-center underline underline-offset-2">
-          Shipment Details
-        </p>
-
-        <div class="grid grid-cols-2 gap-6 items-center">
-          <label>KOT</label>
-          <input
-            type="number"
-            name="KOT"
-            class="border-2 border-blue-500 rounded-xl px-2 py-1"
-            [formControl]="KOT"
-          />
-          <!-- validators -->
-          <div
-            class="col-span-2 text-center -my-5"
-            *ngIf="(KOT?.invalid && KOT?.touched) || KOT?.dirty"
-          >
-            <small *ngIf="KOT?.errors?.['required']" class="text-red-500">
-              required
-            </small>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-2 gap-6 items-center">
-          <label>MLR No</label>
-          <input
-            type="number"
-            name="mlrNo"
-            class="border-2 border-blue-500 rounded-xl px-2 py-1"
-            [formControl]="mlrNo"
-          />
-          <!-- validators -->
-          <div
-            class="col-span-2 text-center -my-5"
-            *ngIf="(mlrNo?.invalid && mlrNo?.touched) || mlrNo?.dirty"
-          >
-            <small *ngIf="mlrNo?.errors?.['required']" class="text-red-500">
-              required
-            </small>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-2 gap-6 items-center">
-          <label>Labour</label>
-          <input
-            type="text"
-            name="labour"
-            class="border-2 border-blue-500 rounded-xl px-2 py-1"
-            [formControl]="labour"
-          />
-          <!-- validators -->
-          <div
-            class="col-span-2 text-center -my-5"
-            *ngIf="(labour?.invalid && labour?.touched) || labour?.dirty"
-          >
-            <small *ngIf="labour?.errors?.['required']" class="text-red-500">
-              required
-            </small>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-2 gap-6 items-center">
-          <label>Diesel Voucher Number</label>
-          <input
-            type="number"
-            name="deiselVoucherNo"
-            class="border-2 border-blue-500 rounded-xl px-2 py-1"
-            [formControl]="deiselVoucherNo"
-          />
-          <!-- validators -->
-          <div
-            class="col-span-2 text-center -my-5"
-            *ngIf="
-              (deiselVoucherNo?.invalid && deiselVoucherNo?.touched) ||
-              deiselVoucherNo?.dirty
-            "
-          >
-            <small
-              *ngIf="deiselVoucherNo?.errors?.['required']"
-              class="text-red-500"
-            >
-              required
-            </small>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-2 gap-6 items-center">
-          <label>Diesel Amount</label>
-          <input
-            type="number"
-            name="deiselAmt"
-            class="border-2 border-blue-500 rounded-xl px-2 py-1"
-            [formControl]="deiselAmt"
-          />
-          <!-- validators -->
-          <div
-            class="col-span-2 text-center -my-5"
-            *ngIf="
-              (deiselAmt?.invalid && deiselAmt?.touched) || deiselAmt?.dirty
-            "
-          >
-            <small *ngIf="deiselAmt?.errors?.['required']" class="text-red-500">
-              required
-            </small>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="grid grid-cols-2 gap-96 items-center">
-      <div class="space-y-4">
-        <p class="text-2xl text-center underline underline-offset-2">
-          Cash Expense
-        </p>
-
-        <div class="grid grid-cols-2 gap-6 items-center">
-          <label>Khuraki</label>
-          <input
-            type="number"
-            name="khuraki"
-            class="border-2 border-blue-500 rounded-xl px-2 py-1"
-            [formControl]="Khuraki"
-          />
-          <!-- validators -->
-          <div
-            class="col-span-2 text-center -my-5"
-            *ngIf="(Khuraki?.invalid && Khuraki?.touched) || Khuraki?.dirty"
-          >
-            <small *ngIf="Khuraki?.errors?.['required']" class="text-red-500">
-              required
-            </small>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-2 gap-6 items-center">
-          <label>Freight</label>
-          <input
-            type="number"
-            name="frieght"
-            class="border-2 border-blue-500 rounded-xl px-2 py-1"
-            [formControl]="frieght"
-          />
-          <!-- validators -->
-          <div
-            class="col-span-2 text-center -my-5"
-            *ngIf="(frieght?.invalid && frieght?.touched) || frieght?.dirty"
-          >
-            <small *ngIf="frieght?.errors?.['required']" class="text-red-500">
-              required
-            </small>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-2 gap-6 items-center">
-          <label>Toll</label>
-          <input
-            type="number"
-            name="toll"
-            class="border-2 border-blue-500 rounded-xl px-2 py-1"
-            [formControl]="toll"
-          />
-          <!-- validators -->
-          <div
-            class="col-span-2 text-center -my-5"
-            *ngIf="(toll?.invalid && toll?.touched) || toll?.dirty"
-          >
-            <small *ngIf="toll?.errors?.['required']" class="text-red-500">
-              required
-            </small>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-2 gap-6 items-center">
-          <label>Repairs</label>
-          <input
-            type="number"
-            name="repairs"
-            class="border-2 border-blue-500 rounded-xl px-2 py-1"
-            [formControl]="repairs"
-          />
-          <!-- validators -->
-          <div
-            class="col-span-2 text-center -my-5"
-            *ngIf="(repairs?.invalid && repairs?.touched) || repairs?.dirty"
-          >
-            <small *ngIf="repairs?.errors?.['required']" class="text-red-500">
-              required
-            </small>
-          </div>
-        </div>
-      </div>
-      <div class="space-y-4">
-        <p class="text-2xl text-center underline underline-offset-2">
-          Post Delivery
-        </p>
-        <div class="grid grid-cols-2 gap-6 items-center">
-          <label>Cash expense</label>
-          <input
-            type="number"
-            name="cashExp"
-            class="border-2 border-blue-500 rounded-xl px-2 py-1"
-            [formControl]="cashExp"
-          />
-          <!-- validators -->
-          <div
-            class="col-span-2 text-center -my-5"
-            *ngIf="(cashExp?.invalid && cashExp?.touched) || cashExp?.dirty"
-          >
-            <small *ngIf="cashExp?.errors?.['required']" class="text-red-500">
-              required
-            </small>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-2 gap-6 items-center">
-          <label>Invoice Ackn</label>
-          <input
-            type="text"
-            name="invoiceAckn"
-            class="border-2 border-blue-500 rounded-xl px-2 py-1"
-            [formControl]="invoiceAckn"
-          />
-          <!-- validators -->
-          <div
-            class="col-span-2 text-center -my-5"
-            *ngIf="
-              (invoiceAckn?.invalid && invoiceAckn?.touched) ||
-              invoiceAckn?.dirty
-            "
-          >
-            <small
-              *ngIf="invoiceAckn?.errors?.['required']"
-              class="text-red-500"
-            >
-              required
-            </small>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-2 gap-6 items-center">
-          <label>MLR Ackn</label>
-          <input
-            type="text"
-            name="mlrAckn"
-            class="border-2 border-blue-500 rounded-xl px-2 py-1"
-            [formControl]="mlrAckn"
-          />
-          <!-- validators -->
-          <div
-            class="col-span-2 text-center -my-5"
-            *ngIf="(mlrAckn?.invalid && mlrAckn?.touched) || mlrAckn?.dirty"
-          >
-            <small *ngIf="mlrAckn?.errors?.['required']" class="text-red-500">
-              required
-            </small>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <button
-      type="submit"
-      (click)="handleSubmit(null)"
-      class="px-4 py-2 bg-blue-500 text-white text-2xl rounded-xl"
-    >
-      Submit
-    </button>
-  </form>
-
   <!-- Update Invoices  -->
-  <form
-    *ngIf="add == false && update == true && del == false"
-    class="flex flex-col items-center w-screen space-y-4 my-20"
-  >
-    <div *ngIf="gotData == true" class="grid grid-cols-2 gap-96 items-center">
-      <div class="space-y-4">
-        <p class="text-2xl text-center underline underline-offset-2">
-          Customer Details
-        </p>
-
-        <div class="grid grid-cols-2 gap-6 items-center">
-          <label>Vehicle No</label>
-          <input
-            type="text"
-            [placeholder]="updateData.vehicleNo"
-            name="vehicleNo"
-            class="border-2 border-blue-500 rounded-xl px-2 py-1"
-            [formControl]="vehicleNo"
-          />
-        </div>
-
-        <div class="grid grid-cols-2 gap-6 items-center">
-          <label>Customer Name</label>
-          <input
-            type="text"
-            [placeholder]="updateData.customerName"
-            name="customerName"
-            class="border-2 border-blue-500 rounded-xl px-2 py-1"
-            [formControl]="customerName"
-          />
-        </div>
-
-        <div class="grid grid-cols-2 gap-6 items-center">
-          <label>W/S Code</label>
-          <input
-            [placeholder]="updateData.wsCode"
-            type="text"
-            name="wsCode"
-            class="border-2 border-blue-500 rounded-xl px-2 py-1"
-            [formControl]="wsCode"
-          />
-        </div>
-        <div class="grid grid-cols-2 gap-6 items-center">
-          <label>W/S Name</label>
-          <input
-            [placeholder]="updateData.wsName"
-            type="text"
-            name="wsName"
-            class="border-2 border-blue-500 rounded-xl px-2 py-1"
-            [formControl]="wsName"
-          />
-        </div>
-        <div class="grid grid-cols-2 gap-6 items-center">
-          <label>W/S Town</label>
-          <input
-            [placeholder]="updateData.wsTown"
-            type="text"
-            name="wsTown"
-            class="border-2 border-blue-500 rounded-xl px-2 py-1"
-            [formControl]="wsTown"
-          />
-        </div>
-        <div class="grid grid-cols-2 gap-6 items-center">
-          <label>Distance</label>
-          <input
-            [placeholder]="updateData.distance"
-            type="number"
-            name="distance"
-            class="border-2 border-blue-500 rounded-xl px-2 py-1"
-            [formControl]="distance"
-          />
-        </div>
-      </div>
-      <div class="space-y-4">
-        <p class="text-2xl text-center underline underline-offset-2">
-          Shipment Details
-        </p>
-        <div class="grid grid-cols-2 gap-6 items-center">
-          <label>KOT</label>
-          <input
-            [placeholder]="updateData.KOT"
-            type="text"
-            name="KOT"
-            class="border-2 border-blue-500 rounded-xl px-2 py-1"
-            [formControl]="KOT"
-          />
-        </div>
-        <div class="grid grid-cols-2 gap-6 items-center">
-          <label>MLR No</label>
-          <input
-            [placeholder]="updateData.mlrNo"
-            type="text"
-            name="mlrNo"
-            class="border-2 border-blue-500 rounded-xl px-2 py-1"
-            [formControl]="mlrNo"
-          />
-        </div>
-        <div class="grid grid-cols-2 gap-6 items-center">
-          <label>Labour</label>
-          <input
-            [placeholder]="updateData.labour"
-            type="text"
-            name="labour"
-            class="border-2 border-blue-500 rounded-xl px-2 py-1"
-            [formControl]="labour"
-          />
-        </div>
-        <div class="grid grid-cols-2 gap-6 items-center">
-          <label>Diesel Voucher Number</label>
-          <input
-            [placeholder]="updateData.deiselVoucherNo"
-            type="text"
-            name="deiselVoucherNo"
-            class="border-2 border-blue-500 rounded-xl px-2 py-1"
-            [formControl]="deiselVoucherNo"
-          />
-        </div>
-        <div class="grid grid-cols-2 gap-6 items-center">
-          <label>Diesel Amount</label>
-          <input
-            [placeholder]="updateData.deiselAmt"
-            type="text"
-            name="deiselAmt"
-            class="border-2 border-blue-500 rounded-xl px-2 py-1"
-            [formControl]="deiselAmt"
-          />
-        </div>
-      </div>
-    </div>
-
-    <div *ngIf="gotData == true" class="grid grid-cols-2 gap-96 items-center">
-      <div class="space-y-4">
-        <p class="text-2xl text-center underline underline-offset-2">
-          Cash Expense
-        </p>
-        <div class="grid grid-cols-2 gap-6 items-center">
-          <label>Khuraki</label>
-          <input
-            [placeholder]="updateData.Khuraki"
-            type="text"
-            name="khuraki"
-            class="border-2 border-blue-500 rounded-xl px-2 py-1"
-            [formControl]="Khuraki"
-          />
-        </div>
-        <div class="grid grid-cols-2 gap-6 items-center">
-          <label>Freight</label>
-          <input
-            [placeholder]="updateData.frieght"
-            type="text"
-            name="frieght"
-            class="border-2 border-blue-500 rounded-xl px-2 py-1"
-            [formControl]="frieght"
-          />
-        </div>
-        <div class="grid grid-cols-2 gap-6 items-center">
-          <label>Toll</label>
-          <input
-            [placeholder]="updateData.toll"
-            type="text"
-            name="toll"
-            class="border-2 border-blue-500 rounded-xl px-2 py-1"
-            [formControl]="toll"
-          />
-        </div>
-        <div class="grid grid-cols-2 gap-6 items-center">
-          <label>Repairs</label>
-          <input
-            [placeholder]="updateData.repairs"
-            type="text"
-            name="repairs"
-            class="border-2 border-blue-500 rounded-xl px-2 py-1"
-            [formControl]="repairs"
-          />
-        </div>
-      </div>
-      <div class="space-y-4">
-        <p class="text-2xl text-center underline underline-offset-2">
-          Billing Details
-        </p>
-        <div class="grid grid-cols-2 gap-6 items-center">
-          <label>Billing Data</label>
-          <input
-            [placeholder]="updateData.billingDate"
-            type="text"
-            name="billingDate"
-            class="border-2 border-blue-500 rounded-xl px-2 py-1"
-            [formControl]="billingDate"
-          />
-        </div>
-        <div class="grid grid-cols-2 gap-6 items-center">
-          <label>Billing Document</label>
-          <input
-            [placeholder]="updateData.billingDoc"
-            type="text"
-            name="billingDoc"
-            class="border-2 border-blue-500 rounded-xl px-2 py-1"
-            [formControl]="billingDoc"
-          />
-        </div>
-        <div class="grid grid-cols-2 gap-6 items-center">
-          <label>GST Invoice No</label>
-          <input
-            [placeholder]="updateData.gstInvoiceNo"
-            type="text"
-            name="gstInvoiceNo"
-            class="border-2 border-blue-500 rounded-xl px-2 py-1"
-            [formControl]="gstInvoiceNo"
-          />
-        </div>
-        <div class="grid grid-cols-2 gap-6 items-center">
-          <label>Ownership</label>
-          <input
-            [placeholder]="updateData.ownership"
-            type="text"
-            name="ownership"
-            class="border-2 border-blue-500 rounded-xl px-2 py-1"
-            [formControl]="ownership"
-          />
-        </div>
-      </div>
-    </div>
-
+  <div *ngIf="add == false && update == true && del == false">
     <button
-      *ngIf="gotData == true"
-      type="submit"
-      (click)="handleSubmit(invoiceId)"
-      class="px-4 py-2 bg-blue-500 text-white text-2xl rounded-xl"
+      (click)="cancel()"
+      class="float-right material-icons text-red-600 text-4xl"
     >
-      Update
+      cancel
     </button>
-  </form>
 
-  <div class="flex justify-center items-center">
-    <input type="file" (change)="xlUpload($event)" />
+    <form class="flex flex-col items-center w-screen space-y-4 my-20">
+      <div *ngIf="gotData == true" class="grid grid-cols-2 gap-96 items-center">
+        <div class="space-y-4">
+          <p class="text-2xl text-center underline underline-offset-2">
+            Customer Details
+          </p>
+
+          <div class="grid grid-cols-2 gap-6 items-center">
+            <label>Vehicle No</label>
+            <input
+              type="text"
+              [placeholder]="updateData.vehicleNo"
+              name="vehicleNo"
+              class="border-2 border-blue-500 rounded-xl px-2 py-1"
+              [formControl]="vehicleNo"
+            />
+          </div>
+
+          <div class="grid grid-cols-2 gap-6 items-center">
+            <label>Customer Name</label>
+            <input
+              type="text"
+              [placeholder]="updateData.customerName"
+              name="customerName"
+              class="border-2 border-blue-500 rounded-xl px-2 py-1"
+              [formControl]="customerName"
+            />
+          </div>
+
+          <div class="grid grid-cols-2 gap-6 items-center">
+            <label>W/S Code</label>
+            <input
+              [placeholder]="updateData.wsCode"
+              type="text"
+              name="wsCode"
+              class="border-2 border-blue-500 rounded-xl px-2 py-1"
+              [formControl]="wsCode"
+            />
+          </div>
+          <div class="grid grid-cols-2 gap-6 items-center">
+            <label>W/S Name</label>
+            <input
+              [placeholder]="updateData.wsName"
+              type="text"
+              name="wsName"
+              class="border-2 border-blue-500 rounded-xl px-2 py-1"
+              [formControl]="wsName"
+            />
+          </div>
+          <div class="grid grid-cols-2 gap-6 items-center">
+            <label>W/S Town</label>
+            <input
+              [placeholder]="updateData.wsTown"
+              type="text"
+              name="wsTown"
+              class="border-2 border-blue-500 rounded-xl px-2 py-1"
+              [formControl]="wsTown"
+            />
+          </div>
+          <div class="grid grid-cols-2 gap-6 items-center">
+            <label>Distance</label>
+            <input
+              [placeholder]="updateData.distance"
+              type="number"
+              name="distance"
+              class="border-2 border-blue-500 rounded-xl px-2 py-1"
+              [formControl]="distance"
+            />
+          </div>
+        </div>
+        <div class="space-y-4">
+          <p class="text-2xl text-center underline underline-offset-2">
+            Shipment Details
+          </p>
+          <div class="grid grid-cols-2 gap-6 items-center">
+            <label>KOT</label>
+            <input
+              [placeholder]="updateData.KOT"
+              type="text"
+              name="KOT"
+              class="border-2 border-blue-500 rounded-xl px-2 py-1"
+              [formControl]="KOT"
+            />
+          </div>
+          <div class="grid grid-cols-2 gap-6 items-center">
+            <label>MLR No</label>
+            <input
+              [placeholder]="updateData.mlrNo"
+              type="text"
+              name="mlrNo"
+              class="border-2 border-blue-500 rounded-xl px-2 py-1"
+              [formControl]="mlrNo"
+            />
+          </div>
+          <div class="grid grid-cols-2 gap-6 items-center">
+            <label>Labour</label>
+            <input
+              [placeholder]="updateData.labour"
+              type="text"
+              name="labour"
+              class="border-2 border-blue-500 rounded-xl px-2 py-1"
+              [formControl]="labour"
+            />
+          </div>
+          <div class="grid grid-cols-2 gap-6 items-center">
+            <label>Diesel Voucher Number</label>
+            <input
+              [placeholder]="updateData.deiselVoucherNo"
+              type="text"
+              name="deiselVoucherNo"
+              class="border-2 border-blue-500 rounded-xl px-2 py-1"
+              [formControl]="deiselVoucherNo"
+            />
+          </div>
+          <div class="grid grid-cols-2 gap-6 items-center">
+            <label>Diesel Amount</label>
+            <input
+              [placeholder]="updateData.deiselAmt"
+              type="text"
+              name="deiselAmt"
+              class="border-2 border-blue-500 rounded-xl px-2 py-1"
+              [formControl]="deiselAmt"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="gotData == true" class="grid grid-cols-2 gap-96 items-center">
+        <div class="space-y-4">
+          <p class="text-2xl text-center underline underline-offset-2">
+            Cash Expense
+          </p>
+          <div class="grid grid-cols-2 gap-6 items-center">
+            <label>Khuraki</label>
+            <input
+              [placeholder]="updateData.Khuraki"
+              type="text"
+              name="khuraki"
+              class="border-2 border-blue-500 rounded-xl px-2 py-1"
+              [formControl]="Khuraki"
+            />
+          </div>
+          <div class="grid grid-cols-2 gap-6 items-center">
+            <label>Freight</label>
+            <input
+              [placeholder]="updateData.frieght"
+              type="text"
+              name="frieght"
+              class="border-2 border-blue-500 rounded-xl px-2 py-1"
+              [formControl]="frieght"
+            />
+          </div>
+          <div class="grid grid-cols-2 gap-6 items-center">
+            <label>Toll</label>
+            <input
+              [placeholder]="updateData.toll"
+              type="text"
+              name="toll"
+              class="border-2 border-blue-500 rounded-xl px-2 py-1"
+              [formControl]="toll"
+            />
+          </div>
+          <div class="grid grid-cols-2 gap-6 items-center">
+            <label>Repairs</label>
+            <input
+              [placeholder]="updateData.repairs"
+              type="text"
+              name="repairs"
+              class="border-2 border-blue-500 rounded-xl px-2 py-1"
+              [formControl]="repairs"
+            />
+          </div>
+        </div>
+        <div class="space-y-4">
+          <p class="text-2xl text-center underline underline-offset-2">
+            Billing Details
+          </p>
+          <div class="grid grid-cols-2 gap-6 items-center">
+            <label>Billing Data</label>
+            <input
+              [placeholder]="updateData.billingDate"
+              type="text"
+              name="billingDate"
+              class="border-2 border-blue-500 rounded-xl px-2 py-1"
+              [formControl]="billingDate"
+            />
+          </div>
+          <div class="grid grid-cols-2 gap-6 items-center">
+            <label>Billing Document</label>
+            <input
+              [placeholder]="updateData.billingDoc"
+              type="text"
+              name="billingDoc"
+              class="border-2 border-blue-500 rounded-xl px-2 py-1"
+              [formControl]="billingDoc"
+            />
+          </div>
+          <div class="grid grid-cols-2 gap-6 items-center">
+            <label>GST Invoice No</label>
+            <input
+              [placeholder]="updateData.gstInvoiceNo"
+              type="text"
+              name="gstInvoiceNo"
+              class="border-2 border-blue-500 rounded-xl px-2 py-1"
+              [formControl]="gstInvoiceNo"
+            />
+          </div>
+          <div class="grid grid-cols-2 gap-6 items-center">
+            <label>Ownership</label>
+            <input
+              [placeholder]="updateData.ownership"
+              type="text"
+              name="ownership"
+              class="border-2 border-blue-500 rounded-xl px-2 py-1"
+              [formControl]="ownership"
+            />
+          </div>
+        </div>
+      </div>
+
+      <button
+        *ngIf="gotData == true"
+        type="submit"
+        (click)="handleSubmit(invoiceId)"
+        class="px-4 py-2 bg-blue-500 text-white text-2xl rounded-xl"
+      >
+        Update
+      </button>
+    </form>
+  </div>
+
+  <!-- Upload Excel File and Create Dataset -->
+  <div
+    *ngIf="log == false && isResPass == false && user"
+    class="flex flex-col space-y-12 justify-center items-center"
+  >
+    <button
+      class="px-4 py-2 bg-green-500 text-white text-2xl rounded-xl"
+      (click)="create()"
+    >
+      Create Dataset
+    </button>
+
+    <label
+      class="h-24 w-1/3 text-slate-500 flex justify-center border-dashed items-center cursor-pointer rounded-xl border-2 border-black"
+      for="fileInpt"
+    >
+      <input
+        type="file"
+        class="hidden"
+        id="fileInpt"
+        (change)="xlUpload($event)"
+      />
+      <p>Upload Excel</p>
+    </label>
   </div>
 </div>

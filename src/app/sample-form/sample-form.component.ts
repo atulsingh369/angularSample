@@ -39,40 +39,40 @@ import { InvoiceData } from './sample-form.interface';
 })
 export class SampleFormComponent implements OnInit, OnChanges {
   // Form Variables
-  invoiceNo = new FormControl('', [Validators.required]);
-  vehicleNo = new FormControl('', [Validators.required]);
-  wsCode = new FormControl('', [Validators.required]);
-  wsName = new FormControl('', [Validators.required]);
-  wsTown = new FormControl('', [Validators.required]);
+  invoiceNo = new FormControl('');
+  vehicleNo = new FormControl('');
+  wsCode = new FormControl('');
+  wsName = new FormControl('');
+  wsTown = new FormControl('');
   distance = new FormControl();
-  labour = new FormControl('', [Validators.required]);
-  mlrNo = new FormControl([Validators.required]);
-  frieght = new FormControl([Validators.required]);
-  deiselVoucherNo = new FormControl('', [Validators.required]);
-  deiselAmt = new FormControl([Validators.required]);
-  Khuraki = new FormControl([Validators.required]);
-  toll = new FormControl([Validators.required]);
-  repairs = new FormControl([Validators.required]);
-  cashExp = new FormControl('', [Validators.required]);
-  ownership = new FormControl('', [Validators.required]);
-  invoiceAckn = new FormControl('', [Validators.required]);
-  mlrAckn = new FormControl('', [Validators.required]);
-  resPass = new FormControl('', [Validators.required]);
-  billingDate = new FormControl('', [Validators.required]);
-  soldToParty = new FormControl([Validators.required]);
-  customerName = new FormControl('', [Validators.required]);
-  billingDoc = new FormControl('', [Validators.required]);
-  gstInvoiceNo = new FormControl('', [Validators.required]);
-  KOT = new FormControl([Validators.required]);
-  totalInvoiceAmt = new FormControl([Validators.required]);
-  salesShipmentDiff = new FormControl([Validators.required]);
-  shipmentNo = new FormControl([Validators.required]);
-  shipmentCostDate = new FormControl('', [Validators.required]);
-  transporterName = new FormControl('', [Validators.required]);
-  serviceAgent = new FormControl('', [Validators.required]);
-  ownershipnew = new FormControl('', [Validators.required]);
-  userDisplayName = new FormControl('', [Validators.required]);
-  userEmail = new FormControl('', [Validators.required]);
+  labour = new FormControl('');
+  mlrNo = new FormControl();
+  frieght = new FormControl();
+  deiselVoucherNo = new FormControl('');
+  deiselAmt = new FormControl();
+  Khuraki = new FormControl();
+  toll = new FormControl();
+  repairs = new FormControl();
+  cashExp = new FormControl('');
+  ownership = new FormControl('');
+  invoiceAckn = new FormControl('');
+  mlrAckn = new FormControl('');
+  resPass = new FormControl('');
+  billingDate = new FormControl('');
+  soldToParty = new FormControl();
+  customerName = new FormControl('');
+  billingDoc = new FormControl('');
+  gstInvoiceNo = new FormControl('');
+  KOT = new FormControl();
+  totalInvoiceAmt = new FormControl();
+  salesShipmentDiff = new FormControl();
+  shipmentNo = new FormControl();
+  shipmentCostDate = new FormControl('');
+  transporterName = new FormControl('');
+  serviceAgent = new FormControl('');
+  ownershipnew = new FormControl('');
+  userDisplayName = new FormControl('');
+  userEmail = new FormControl('');
 
   user: any;
   public loggedIn: boolean = false;
@@ -178,6 +178,7 @@ export class SampleFormComponent implements OnInit, OnChanges {
           localStorage.setItem('userData', JSON.stringify(user));
           this.getAuthData();
 
+          this.toastr.success(`Welcome ${this.user.displayName}`);
           this.userEmails.reset();
           this.userEmails.controls['name'].setErrors(null);
           this.userEmails.controls['email'].setErrors(null);
@@ -187,13 +188,13 @@ export class SampleFormComponent implements OnInit, OnChanges {
         .catch((error) => {
           const errorCode = error.code;
           const errorMessage = error.message;
-          alert(errorCode);
+          this.toastr.error(errorCode);
           this.userEmails.reset();
           this.userEmails.controls['name'].setErrors(null);
           this.userEmails.controls['email'].setErrors(null);
           this.userEmails.controls['password'].setErrors(null);
         });
-    } else alert('Enter Details');
+    } else this.toastr.info('Enter Details');
   }
 
   handleRegister(): void {
@@ -223,14 +224,14 @@ export class SampleFormComponent implements OnInit, OnChanges {
           this.userEmails.controls['name'].setErrors(null);
           this.userEmails.controls['email'].setErrors(null);
           this.userEmails.controls['password'].setErrors(null);
-          alert('User registered');
+          this.toastr.info('User registered');
           this.regis = false;
         })
         .catch((error) => {
           const errorCode = error.code;
-          alert(errorCode);
+          this.toastr.info(errorCode);
         });
-    } else alert('Enter Details');
+    } else this.toastr.info('Enter Details');
   }
 
   googleLogin(): void {
@@ -238,12 +239,14 @@ export class SampleFormComponent implements OnInit, OnChanges {
       async (credentials: UserCredential) => {
         this.user = credentials.user;
         this.log = false;
+        localStorage.setItem('userData', JSON.stringify(this.user));
         setDoc(doc(this.firestore, 'users', `${this.user.uid}`), {
           displayName: this.user.displayName,
           email: this.user.email,
         });
       }
     );
+    this.toastr.success(`Welcome ${this.user.displayName}`);
   }
 
   login(): void {
@@ -258,7 +261,7 @@ export class SampleFormComponent implements OnInit, OnChanges {
       .then(() => {
         // Sign-out successful.
         localStorage.removeItem('userData');
-        alert('Logged Out');
+        this.toastr.info('Logged Out');
         this.getAuthData();
       })
       .catch((error) => {
@@ -283,123 +286,148 @@ export class SampleFormComponent implements OnInit, OnChanges {
           this.resPass.value
         )
           .then(() => {
-            alert('Password has changed');
+            this.toastr.success('Password has changed');
           })
           .catch((error) => {
-            console.log(error);
-            alert('Password not changed');
+            this.toastr.error(error.code);
           });
         this.isResPass = false;
         this.resPass.reset('');
       } else {
-        alert('Enter Details');
+        this.toastr.error('Enter Details');
       }
-    } else alert('Login to continue');
+    } else this.toastr.error('Login to continue');
   }
 
   //FireStore
   saveData(id: any): void {
-    setDoc(
-      doc(this.firestore, 'invoices', id ? `${id}` : `${this.invoiceNo.value}`),
-      {
-        vehicleNo:
-          this.vehicleNo.value !== ''
-            ? this.vehicleNo.value
-            : this.updateData.vehicleNo,
-        wsCode:
-          this.wsCode.value !== '' ? this.wsCode.value : this.updateData.wsCode,
-        wsName:
-          this.wsName.value !== '' ? this.wsName.value : this.updateData.wsName,
-        wsTown:
-          this.wsTown.value !== '' ? this.wsTown.value : this.updateData.wsTown,
-        distance:
-          this.distance.value !== ''
-            ? this.distance.value
-            : this.updateData.distance,
-        KOT: this.KOT.value ? this.KOT.value : this.updateData.KOT,
-        mlrNo: this.mlrNo.value ? this.mlrNo.value : this.updateData.mlrNo,
-        gstInvoiceNo:
-          this.gstInvoiceNo.value !== ''
-            ? this.invoiceNo.value
-            : this.updateData.gstInvoiceNo,
-        labour:
-          this.labour.value !== '' ? this.labour.value : this.updateData.labour,
-        deiselVoucherNo:
-          this.deiselVoucherNo.value !== ''
-            ? this.deiselVoucherNo.value
-            : this.updateData.deiselVoucherNo,
-        deiselAmt: this.deiselAmt.value
-          ? this.deiselAmt.value
-          : this.updateData.deiselAmt,
-        Khuraki: this.Khuraki.value
-          ? this.Khuraki.value
-          : this.updateData.Khuraki,
-        frieght: this.frieght.value
-          ? this.frieght.value
-          : this.updateData.frieght,
-        toll: this.toll.value ? this.toll.value : this.updateData.toll,
-        repairs: this.repairs.value
-          ? this.repairs.value
-          : this.updateData.repairs,
-        cashExp: this.cashExp.value,
-        invoiceAckn: this.vehicleNo.value,
-        mlrAckn: this.vehicleNo.value,
-        userDisplayName: this.authenticationService.currentUser?.displayName,
-        userEmail: this.authenticationService.currentUser?.email,
+    try {
+      setDoc(
+        doc(
+          this.firestore,
+          'invoices',
+          id ? `${id}` : `${this.invoiceNo.value}`
+        ),
+        {
+          vehicleNo:
+            this.vehicleNo.value !== ''
+              ? this.vehicleNo.value
+              : this.updateData.vehicleNo,
+          wsCode:
+            this.wsCode.value !== ''
+              ? this.wsCode.value
+              : this.updateData.wsCode,
+          wsName:
+            this.wsName.value !== ''
+              ? this.wsName.value
+              : this.updateData.wsName,
+          wsTown:
+            this.wsTown.value !== ''
+              ? this.wsTown.value
+              : this.updateData.wsTown,
+          distance:
+            this.distance.value !== ''
+              ? this.distance.value
+              : this.updateData.distance,
+          KOT: this.KOT.value !== '' ? this.KOT.value : this.updateData.KOT,
+          mlrNo:
+            this.mlrNo.value !== '' ? this.mlrNo.value : this.updateData.mlrNo,
+          gstInvoiceNo:
+            this.invoiceNo.value !== ''
+              ? this.invoiceNo.value
+              : this.updateData.gstInvoiceNo,
+          labour:
+            this.labour.value !== ''
+              ? this.labour.value
+              : this.updateData.labour,
+          deiselVoucherNo:
+            this.deiselVoucherNo.value !== ''
+              ? this.deiselVoucherNo.value
+              : this.updateData.deiselVoucherNo,
+          deiselAmt:
+            this.deiselAmt.value !== ''
+              ? this.deiselAmt.value
+              : this.updateData.deiselAmt,
+          Khuraki:
+            this.Khuraki.value !== ''
+              ? this.Khuraki.value
+              : this.updateData.Khuraki,
+          frieght:
+            this.vehicleNo.value !== ''
+              ? this.vehicleNo.value
+              : this.updateData.vehicleNo,
+          toll: this.toll.value !== '' ? this.toll.value : this.updateData.toll,
+          repairs:
+            this.repairs.value !== ''
+              ? this.repairs.value
+              : this.updateData.repairs,
+          cashExp: this.cashExp.value,
+          invoiceAckn: this.vehicleNo.value,
+          mlrAckn: this.vehicleNo.value,
+          userDisplayName: this.authenticationService.currentUser?.displayName,
+          userEmail: this.authenticationService.currentUser?.email,
 
-        billingDate:
-          this.billingDate.value !== ''
-            ? this.billingDate.value
-            : this.updateData.billingDate,
-        soldToParty: this.soldToParty.value
-          ? this.soldToParty.value
-          : this.updateData.soldToParty,
-        customerName:
-          this.customerName.value !== ''
-            ? this.customerName.value
-            : this.updateData.customerName,
-        billingDoc:
-          this.billingDoc.value !== ''
-            ? this.billingDoc.value
-            : this.updateData.billingDoc,
+          billingDate:
+            this.billingDate.value !== ''
+              ? this.billingDate.value
+              : this.updateData.billingDate,
+          soldToParty:
+            this.soldToParty.value !== ''
+              ? this.soldToParty.value
+              : this.updateData.soldToParty,
+          customerName:
+            this.customerName.value !== ''
+              ? this.customerName.value
+              : this.updateData.customerName,
+          billingDoc:
+            this.billingDoc.value !== ''
+              ? this.billingDoc.value
+              : this.updateData.billingDoc,
 
-        totalInvoiceAmt: this.totalInvoiceAmt.value
-          ? this.totalInvoiceAmt.value
-          : this.updateData.totalInvoiceAmt,
-        salesShipmentDiff: this.salesShipmentDiff.value
-          ? this.salesShipmentDiff.value
-          : this.updateData.salesShipmentDiff,
-        shipmentNo: this.shipmentNo.value
-          ? this.shipmentNo.value
-          : this.updateData.shipmentNo,
-        shipmentCostDate:
-          this.shipmentCostDate.value !== ''
-            ? this.shipmentCostDate.value
-            : this.updateData.shipmentCostDate,
-        transporterName:
-          this.transporterName.value !== ''
-            ? this.transporterName.value
-            : this.updateData.transporterName,
-        serviceAgent:
-          this.serviceAgent.value !== ''
-            ? this.serviceAgent.value
-            : this.updateData.serviceAgent,
-        ownership:
-          this.ownership.value !== ''
-            ? this.ownership.value
-            : this.updateData.ownership,
-      }
-    );
-    this.getInvoices();
+          totalInvoiceAmt:
+            this.totalInvoiceAmt.value !== ''
+              ? this.totalInvoiceAmt.value
+              : this.updateData.totalInvoiceAmt,
+          salesShipmentDiff:
+            this.salesShipmentDiff.value !== ''
+              ? this.salesShipmentDiff.value
+              : this.updateData.salesShipmentDiff,
+          shipmentNo:
+            this.shipmentNo.value !== ''
+              ? this.shipmentNo.value
+              : this.updateData.shipmentNo,
+          shipmentCostDate:
+            this.shipmentCostDate.value !== ''
+              ? this.shipmentCostDate.value
+              : this.updateData.shipmentCostDate,
+          transporterName:
+            this.transporterName.value !== ''
+              ? this.transporterName.value
+              : this.updateData.transporterName,
+          serviceAgent:
+            this.serviceAgent.value !== ''
+              ? this.serviceAgent.value
+              : this.updateData.serviceAgent,
+          ownership:
+            this.ownership.value !== ''
+              ? this.ownership.value
+              : this.updateData.ownership,
+        }
+      );
+      id
+        ? this.toastr.success('DataSet Updated')
+        : this.toastr.success('DataSet Created');
+    } catch (error: any) {
+      this.toastr.error(error.code);
+    }
   }
 
   delData(id: any): void {
     deleteDoc(doc(this.firestore, `/invoices/${id}`))
       .then((data) => {
-        this.toastr.success('Deleted Succesfully');
+        this.toastr.success(`DataSet Deleted`);
       })
       .catch((error) => {
-        alert('No Data Found');
         this.toastr.error(error);
       });
   }
@@ -416,12 +444,24 @@ export class SampleFormComponent implements OnInit, OnChanges {
   resetForm(): void {
     this.invoiceNo.setValue('');
     this.vehicleNo.setValue('');
+    this.customerName.setValue('');
     this.wsCode.setValue('');
+    this.billingDate.setValue('');
+    this.billingDoc.setValue('');
+    this.gstInvoiceNo.setValue('');
+    this.ownership.setValue('');
     this.wsName.setValue('');
     this.wsTown.setValue('');
     this.distance.setValue('');
+    this.KOT.setValue('');
+    this.mlrNo.setValue('');
     this.labour.setValue('');
     this.deiselVoucherNo.setValue('');
+    this.deiselAmt.setValue('');
+    this.Khuraki.setValue('');
+    this.frieght.setValue('');
+    this.toll.setValue('');
+    this.repairs.setValue('');
     this.cashExp.setValue('');
     this.invoiceAckn.setValue('');
     this.mlrAckn.setValue('');
@@ -461,7 +501,7 @@ export class SampleFormComponent implements OnInit, OnChanges {
             (this.updateData.totalInvoiceAmt = doc.data()?.['totalInvoiceAmt']),
             (this.gotData = true);
         } else {
-          alert('No Data Found');
+          this.toastr.error('No Data Found');
           this.resetForm();
           this.gotData = false;
           this.update = false;
@@ -471,32 +511,30 @@ export class SampleFormComponent implements OnInit, OnChanges {
   }
 
   handleSubmit(id: any): void {
-    if (!id) {
-      const myArray: any[] = [
-        'invoiceNo',
-        'vehicleNo',
-        'wsCode',
-        'wsName',
-        'wsTown',
-        'distance',
-        'KOT',
-        'mlrNo',
-        'labour',
-        'deiselVoucherNo',
-        'deiselAmt',
-        'Khuraki',
-        'frieght',
-        'toll',
-        'repairs',
-        'cashExp',
-        'invoiceAckn',
-        'mlrAckn',
-      ];
-      for (let i = 0; i < myArray.length; i++) {
-        if (myArray[i].value == '') {
-          alert('Enter Details');
-          return;
-        }
+    const myArray: any[] = [
+      'invoiceNo',
+      'vehicleNo',
+      'wsCode',
+      'wsName',
+      'wsTown',
+      'distance',
+      'KOT',
+      'mlrNo',
+      'labour',
+      'deiselVoucherNo',
+      'deiselAmt',
+      'Khuraki',
+      'frieght',
+      'toll',
+      'repairs',
+      'cashExp',
+      'invoiceAckn',
+      'mlrAckn',
+    ];
+    for (let i = 0; i < myArray.length; i++) {
+      if (myArray[i].value == '') {
+        this.toastr.info('Enter Details');
+        return;
       }
     }
 
@@ -508,8 +546,7 @@ export class SampleFormComponent implements OnInit, OnChanges {
       this.invoicesData = [];
       this.getInvoices();
       this.gotData = false;
-      this.toastr.success('Created Succesfully');
-    } else alert('Login to continue...');
+    } else this.toastr.info('Login to continue...');
   }
 
   handleDelete(id: any): void {
@@ -519,7 +556,7 @@ export class SampleFormComponent implements OnInit, OnChanges {
       this.del = false;
       this.invoicesData = [];
       this.getInvoices();
-    } else alert('Login to continue...');
+    } else this.toastr.error('Login to continue...');
   }
 
   create(): void {
@@ -531,17 +568,23 @@ export class SampleFormComponent implements OnInit, OnChanges {
   upd(id: any): void {
     if (this.authenticationService.currentUser) {
       this.update = true;
+      this.resetForm();
       this.add = false;
       this.del = false;
       this.invoiceId = id;
       this.getSingleDoc(id);
-    } else alert('Login to continue...');
+    } else this.toastr.error('Login to continue...');
   }
 
   delt(): void {
     this.del = true;
     this.update = false;
+  }
+
+  cancel(): void {
+    this.add = false;
     this.update = false;
+    this.del = false;
   }
 
   //Upload Excel
@@ -559,6 +602,7 @@ export class SampleFormComponent implements OnInit, OnChanges {
           // console.log(data[i]);
         }
         this.getInvoices();
+        this.toastr.success('Data Added Successfully');
       }
     };
   }
