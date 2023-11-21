@@ -511,30 +511,32 @@ export class SampleFormComponent implements OnInit, OnChanges {
   }
 
   handleSubmit(id: any): void {
-    const myArray: any[] = [
-      'invoiceNo',
-      'vehicleNo',
-      'wsCode',
-      'wsName',
-      'wsTown',
-      'distance',
-      'KOT',
-      'mlrNo',
-      'labour',
-      'deiselVoucherNo',
-      'deiselAmt',
-      'Khuraki',
-      'frieght',
-      'toll',
-      'repairs',
-      'cashExp',
-      'invoiceAckn',
-      'mlrAckn',
-    ];
-    for (let i = 0; i < myArray.length; i++) {
-      if (myArray[i].value == '') {
-        this.toastr.info('Enter Details');
-        return;
+    if (!id) {
+      const myArray: any[] = [
+        'invoiceNo',
+        'vehicleNo',
+        'wsCode',
+        'wsName',
+        'wsTown',
+        'distance',
+        'KOT',
+        'mlrNo',
+        'labour',
+        'deiselVoucherNo',
+        'deiselAmt',
+        'Khuraki',
+        'frieght',
+        'toll',
+        'repairs',
+        'cashExp',
+        'invoiceAckn',
+        'mlrAckn',
+      ];
+      for (let i = 0; i < myArray.length; i++) {
+        if (!myArray[i].value) {
+          this.toastr.error('Enter all Fields');
+          return;
+        }
       }
     }
 
@@ -546,7 +548,7 @@ export class SampleFormComponent implements OnInit, OnChanges {
       this.invoicesData = [];
       this.getInvoices();
       this.gotData = false;
-    } else this.toastr.info('Login to continue...');
+    } else this.toastr.error('Login to continue...');
   }
 
   handleDelete(id: any): void {
